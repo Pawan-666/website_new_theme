@@ -1,66 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://pawanchhetri.com.np/</loc>
+        <loc>https://blog.pawanchhetri.com.np/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/categories/</loc>
+        <loc>https://blog.pawanchhetri.com.np/categories/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/categories/automation/</loc>
+        <loc>https://blog.pawanchhetri.com.np/categories/automation/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/categories/general/</loc>
+        <loc>https://blog.pawanchhetri.com.np/categories/general/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/categories/homelab/</loc>
+        <loc>https://blog.pawanchhetri.com.np/categories/homelab/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/posts/</loc>
+        <loc>https://blog.pawanchhetri.com.np/posts/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/posts/hello-world/</loc>
+        <loc>https://blog.pawanchhetri.com.np/posts/hello-world/</loc>
         <lastmod>2023-04-01</lastmod>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/posts/homelab/</loc>
+        <loc>https://blog.pawanchhetri.com.np/posts/homelab/</loc>
         <lastmod>2023-09-28</lastmod>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/posts/terrible/</loc>
+        <loc>https://blog.pawanchhetri.com.np/posts/terrible/</loc>
         <lastmod>2023-04-12</lastmod>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/projects/</loc>
+        <loc>https://blog.pawanchhetri.com.np/projects/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/tags/</loc>
+        <loc>https://blog.pawanchhetri.com.np/tags/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/tags/ansible/</loc>
+        <loc>https://blog.pawanchhetri.com.np/tags/ansible/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/tags/aws/</loc>
+        <loc>https://blog.pawanchhetri.com.np/tags/aws/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/tags/docker-compose/</loc>
+        <loc>https://blog.pawanchhetri.com.np/tags/docker-compose/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/tags/docker/</loc>
+        <loc>https://blog.pawanchhetri.com.np/tags/docker/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/tags/homelab/</loc>
+        <loc>https://blog.pawanchhetri.com.np/tags/homelab/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/tags/self-hosting/</loc>
+        <loc>https://blog.pawanchhetri.com.np/tags/self-hosting/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/tags/terraform/</loc>
+        <loc>https://blog.pawanchhetri.com.np/tags/terraform/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/tags/zola/</loc>
+        <loc>https://blog.pawanchhetri.com.np/tags/zola/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/talks/</loc>
+        <loc>https://blog.pawanchhetri.com.np/talks/</loc>
     </url>
 </urlset>

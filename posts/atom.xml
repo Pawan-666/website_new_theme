@@ -2,11 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
     <title>The Oops Guy - The Oops Guy</title>
     <subtitle>Devops and SRE stuffs</subtitle>
-    <link href="https://pawanchhetri.com.np/posts/atom.xml" rel="self" type="application/atom+xml"/>
-    <link href="https://pawanchhetri.com.np/posts/"/>
+    <link href="https://blog.pawanchhetri.com.np/posts/atom.xml" rel="self" type="application/atom+xml"/>
+    <link href="https://blog.pawanchhetri.com.np/posts/"/>
     <generator uri="https://www.getzola.org/">Zola</generator>
     <updated>2023-09-28T00:00:00+00:00</updated>
-    <id>https://pawanchhetri.com.np/posts/atom.xml</id>
+    <id>https://blog.pawanchhetri.com.np/posts/atom.xml</id>
     <entry xml:lang="en">
         <title>Homelab Setup</title>
         <published>2023-09-28T00:00:00+00:00</published>
@@ -14,23 +14,23 @@
         <author>
           <name>Unknown</name>
         </author>
-        <link rel="alternate" href="https://pawanchhetri.com.np/posts/homelab/" type="text/html"/>
-        <id>https://pawanchhetri.com.np/posts/homelab/</id>
+        <link rel="alternate" href="https://blog.pawanchhetri.com.np/posts/homelab/" type="text/html"/>
+        <id>https://blog.pawanchhetri.com.np/posts/homelab/</id>
         
         <content type="html">&lt;p&gt;    After using my trusty old laptop for nearly 5 to 6 years, I noticed it had started making fan noises, even right after a fresh boot-up. Rather than retiring it or letting it gather dust, I decided to give it a new  life by transforming it into a personal homelab server. Leveraging the power of &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;developers.cloudflare.com&#x2F;cloudflare-one&#x2F;&quot;&gt;Cloudflare Zero Trust&lt;&#x2F;a&gt; and a collection of Docker containers, I embarked on a journey to create a versatile homelab environment.&lt;&#x2F;p&gt;
 &lt;p&gt;    Within this homelab, I’ve set up a range of essential services that make daily life more enjoyable and efficient. These include a media player for movies, a music and audiobook player, a book reader, server monitoring tool, webpage monitoring capabilities, and a &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;homepage.pawanchhetri.com.np&quot;&gt;nice looking homepage&lt;&#x2F;a&gt; accessible from virtually any device. What makes these services truly exceptional is their ability to accommodate multiple users, allowing family and friends to join in on the experience from anywhere.&lt;&#x2F;p&gt;
 &lt;p&gt;    To make your homelab setup as smooth as possible, I’ve  provided all the Docker Compose files you’ll need for each of these services. With them, you’ll be up and running in no time, ready to unlock the full potential of your homelab server. So, let’s dive in and see how each services  with respective docker-compose stack looks like.&lt;&#x2F;p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#homepage&quot;&gt;Homepage&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#grafana-prometheus-nodeexporter-cadvisor&quot;&gt;Grafana, Prometheus, nodeexporter, cadvisor&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#portainer&quot;&gt;Portainer&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#uptime-kuma&quot;&gt;uptime-kuma&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#jellyfin&quot;&gt;Jellyfin&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#qbittorrent&quot;&gt;Qbittorrent&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#navidrome&quot;&gt;Navidrome&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#audiobookshelf&quot;&gt;Audiobookshelf&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#kavita&quot;&gt;Kavita&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#setup-requirements-and-best-practices&quot;&gt;Setup Requirements&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;blog.pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#homepage&quot;&gt;Homepage&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;blog.pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#grafana-prometheus-nodeexporter-cadvisor&quot;&gt;Grafana, Prometheus, nodeexporter, cadvisor&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;blog.pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#portainer&quot;&gt;Portainer&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;blog.pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#uptime-kuma&quot;&gt;uptime-kuma&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;blog.pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#jellyfin&quot;&gt;Jellyfin&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;blog.pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#qbittorrent&quot;&gt;Qbittorrent&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;blog.pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#navidrome&quot;&gt;Navidrome&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;blog.pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#audiobookshelf&quot;&gt;Audiobookshelf&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;blog.pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#kavita&quot;&gt;Kavita&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;blog.pawanchhetri.com.np&#x2F;posts&#x2F;homelab&#x2F;#setup-requirements-and-best-practices&quot;&gt;Setup Requirements&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
 &lt;&#x2F;ul&gt;
 &lt;br &#x2F;&gt;
 &lt;h4 id=&quot;homepage&quot;&gt;&lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;homepage.pawanchhetri.com.np&quot;&gt;Homepage&lt;&#x2F;a&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#homepage&quot; aria-label=&quot;Anchor link for: homepage&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
@@ -341,8 +341,8 @@ I&#x27;ve also set up Cloudflare Access to ssh into my machine from the browser 
         <author>
           <name>Unknown</name>
         </author>
-        <link rel="alternate" href="https://pawanchhetri.com.np/posts/terrible/" type="text/html"/>
-        <id>https://pawanchhetri.com.np/posts/terrible/</id>
+        <link rel="alternate" href="https://blog.pawanchhetri.com.np/posts/terrible/" type="text/html"/>
+        <id>https://blog.pawanchhetri.com.np/posts/terrible/</id>
         
         <content type="html">&lt;p&gt;   In this blog post, we will explore how DevOps teams can leverage IAC tools to simplify their infrastructure management and deployment processes using terraform and then ansible one after other. 
 I’m going to make a server on AWS using Terraform and configure server, install necessary packages  using ansible for web page deployment which will display &lt;code&gt;Hello World!&lt;&#x2F;code&gt; on its port 80.&lt;&#x2F;p&gt;
@@ -501,13 +501,19 @@ Btw, our web server is up.&lt;&#x2F;p&gt;
         <author>
           <name>Unknown</name>
         </author>
-        <link rel="alternate" href="https://pawanchhetri.com.np/posts/hello-world/" type="text/html"/>
-        <id>https://pawanchhetri.com.np/posts/hello-world/</id>
+        <link rel="alternate" href="https://blog.pawanchhetri.com.np/posts/hello-world/" type="text/html"/>
+        <id>https://blog.pawanchhetri.com.np/posts/hello-world/</id>
         
         <content type="html">&lt;h2 id=&quot;welcome-to-my-blog&quot;&gt;Welcome to my blog!&lt;a class=&quot;zola-anchor&quot; href=&quot;#welcome-to-my-blog&quot; aria-label=&quot;Anchor link for: welcome-to-my-blog&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
-&lt;p&gt;Hi there! 👋🏽 I’m an Devops and SRE engineer. &lt;&#x2F;p&gt;
+&lt;p&gt;Hi there! 👋🏽 I’m an Devops engineer currently practicing some SRE stuffs. &lt;&#x2F;p&gt;
 &lt;h2 id=&quot;what-will-i-focus-on-in-this-blog&quot;&gt;What will I focus on in this blog?&lt;a class=&quot;zola-anchor&quot; href=&quot;#what-will-i-focus-on-in-this-blog&quot; aria-label=&quot;Anchor link for: what-will-i-focus-on-in-this-blog&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
 &lt;p&gt;I’ll be writing some technical blogs and stuffs.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;tools-used-for-this-site-hosting&quot;&gt;tools used for this site hosting&lt;a class=&quot;zola-anchor&quot; href=&quot;#tools-used-for-this-site-hosting&quot; aria-label=&quot;Anchor link for: tools-used-for-this-site-hosting&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;zola&lt;&#x2F;li&gt;
+&lt;li&gt;github&lt;&#x2F;li&gt;
+&lt;li&gt;cloudflare pages&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
 &lt;h2 id=&quot;and-that-s-that&quot;&gt;And that’s that…&lt;a class=&quot;zola-anchor&quot; href=&quot;#and-that-s-that&quot; aria-label=&quot;Anchor link for: and-that-s-that&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
 &lt;p&gt;I’ll make it a point to try and write as often as possible&lt;&#x2F;p&gt;
 </content>
