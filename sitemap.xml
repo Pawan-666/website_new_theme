@@ -4,6 +4,21 @@
         <loc>https://blog.pawanchhetri.com.np/</loc>
     </url>
     <url>
+        <loc>https://blog.pawanchhetri.com.np/blog/</loc>
+    </url>
+    <url>
+        <loc>https://blog.pawanchhetri.com.np/blog/hello-world/</loc>
+        <lastmod>2023-04-01</lastmod>
+    </url>
+    <url>
+        <loc>https://blog.pawanchhetri.com.np/blog/homelab/</loc>
+        <lastmod>2023-09-28</lastmod>
+    </url>
+    <url>
+        <loc>https://blog.pawanchhetri.com.np/blog/terrible/</loc>
+        <lastmod>2023-04-12</lastmod>
+    </url>
+    <url>
         <loc>https://blog.pawanchhetri.com.np/categories/</loc>
     </url>
     <url>
@@ -14,21 +29,6 @@
     </url>
     <url>
         <loc>https://blog.pawanchhetri.com.np/categories/homelab/</loc>
-    </url>
-    <url>
-        <loc>https://blog.pawanchhetri.com.np/posts/</loc>
-    </url>
-    <url>
-        <loc>https://blog.pawanchhetri.com.np/posts/hello-world/</loc>
-        <lastmod>2023-04-01</lastmod>
-    </url>
-    <url>
-        <loc>https://blog.pawanchhetri.com.np/posts/homelab/</loc>
-        <lastmod>2023-09-28</lastmod>
-    </url>
-    <url>
-        <loc>https://blog.pawanchhetri.com.np/posts/terrible/</loc>
-        <lastmod>2023-04-12</lastmod>
     </url>
     <url>
         <loc>https://blog.pawanchhetri.com.np/projects/</loc>
