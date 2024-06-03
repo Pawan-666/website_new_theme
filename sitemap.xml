@@ -19,10 +19,17 @@
         <lastmod>2023-04-12</lastmod>
     </url>
     <url>
+        <loc>https://pawanchhetri.com.np/blog/vim-cheatsheet/</loc>
+        <lastmod>2024-06-03</lastmod>
+    </url>
+    <url>
         <loc>https://pawanchhetri.com.np/categories/</loc>
     </url>
     <url>
         <loc>https://pawanchhetri.com.np/categories/automation/</loc>
+    </url>
+    <url>
+        <loc>https://pawanchhetri.com.np/categories/cheatsheet/</loc>
     </url>
     <url>
         <loc>https://pawanchhetri.com.np/categories/general/</loc>
@@ -52,10 +59,31 @@
         <loc>https://pawanchhetri.com.np/tags/homelab/</loc>
     </url>
     <url>
+        <loc>https://pawanchhetri.com.np/tags/linux/</loc>
+    </url>
+    <url>
+        <loc>https://pawanchhetri.com.np/tags/lvim/</loc>
+    </url>
+    <url>
+        <loc>https://pawanchhetri.com.np/tags/neovim/</loc>
+    </url>
+    <url>
         <loc>https://pawanchhetri.com.np/tags/self-hosting/</loc>
     </url>
     <url>
+        <loc>https://pawanchhetri.com.np/tags/selfhosted/</loc>
+    </url>
+    <url>
+        <loc>https://pawanchhetri.com.np/tags/terminal/</loc>
+    </url>
+    <url>
         <loc>https://pawanchhetri.com.np/tags/terraform/</loc>
+    </url>
+    <url>
+        <loc>https://pawanchhetri.com.np/tags/vim/</loc>
+    </url>
+    <url>
+        <loc>https://pawanchhetri.com.np/tags/vimium/</loc>
     </url>
     <url>
         <loc>https://pawanchhetri.com.np/tags/zola/</loc>

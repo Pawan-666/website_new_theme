@@ -5,8 +5,376 @@
     <link href="https://pawanchhetri.com.np/atom.xml" rel="self" type="application/atom+xml"/>
     <link href="https://pawanchhetri.com.np"/>
     <generator uri="https://www.getzola.org/">Zola</generator>
-    <updated>2023-09-28T00:00:00+00:00</updated>
+    <updated>2024-06-03T00:00:00+00:00</updated>
     <id>https://pawanchhetri.com.np/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Vim cheatsheet</title>
+        <published>2024-06-03T00:00:00+00:00</published>
+        <updated>2024-06-03T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://pawanchhetri.com.np/blog/vim-cheatsheet/" type="text/html"/>
+        <id>https://pawanchhetri.com.np/blog/vim-cheatsheet/</id>
+        
+        <content type="html">&lt;p&gt;Vim has soul. It is that chisel you inherited from your grandpa that you keep using. It fits well in your grip and is comfortable, even though it lacks the soft rubber that the new ones in the store have. It’s a tool with its own history.&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#1&quot;&gt;1&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;I’ve been using &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;www.vim.org&#x2F;&quot;&gt;Vim&lt;&#x2F;a&gt; since I started with Linux, and it quickly became one of the tools that drew me to the platform. As a terminal-based text editor derived from vi, which dates back to 1977, Vim (or vi) is typically pre-installed on Unix systems, making it a common encounter for anyone working with Unix terminals.&lt;&#x2F;p&gt;
+&lt;p&gt;While I currently use Neovim, the core principles remain the same. Once you become proficient with the basic movements, Vim’s verbs, and modes, the keybindings become second nature. However, reaching this level of proficiency requires a solid initial understanding. More importantly, I choose Vim not only for its efficiency but also because it makes programming and text editing genuinely enjoyable.&lt;&#x2F;p&gt;
+&lt;p&gt;Down the years I’ve noted some of the most used vim motions and commands I’ve been using.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;movements&quot;&gt;movements&lt;a class=&quot;zola-anchor&quot; href=&quot;#movements&quot; aria-label=&quot;Anchor link for: movements&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;%       # go to other end of parenthesis
+&lt;&#x2F;span&gt;&lt;span&gt;*       # next match the current instance under the cursor( replaces the search string, thus n N work)
+&lt;&#x2F;span&gt;&lt;span&gt;#       # previous match of the current instance under the cursor
+&lt;&#x2F;span&gt;&lt;span&gt;+       # beginning of the next line, non-whitespace
+&lt;&#x2F;span&gt;&lt;span&gt;-       #  beginning of the previous line
+&lt;&#x2F;span&gt;&lt;span&gt;(       #  beginning of sentence&#x2F; previous
+&lt;&#x2F;span&gt;&lt;span&gt;)       # end of sentence
+&lt;&#x2F;span&gt;&lt;span&gt;{       # go to the beginning of current paragraph
+&lt;&#x2F;span&gt;&lt;span&gt;}       # go to the beginning of next paragraph
+&lt;&#x2F;span&gt;&lt;span&gt;g_      # go to the last non-whitespace character
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;f[.]    #searches linewise and to repeat that linewise search use a semicolon ;  
+&lt;&#x2F;span&gt;&lt;span&gt;        #comma , does the backward searching.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;F[.]    #searches linewise in backward direction.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;:marks  #m[..]  marks and &amp;#39;[..] to go to that marked position
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h4 id=&quot;linewise&quot;&gt;linewise&lt;a class=&quot;zola-anchor&quot; href=&quot;#linewise&quot; aria-label=&quot;Anchor link for: linewise&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;[n0]G&#x2F;gg  : go to that line
+&lt;&#x2F;span&gt;&lt;span&gt;      same as :[n0]&amp;lt;Enter&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;:jumps    
+&lt;&#x2F;span&gt;&lt;span&gt;[no.]Ctrl-o&#x2F;i   # jump no.     to the previous&#x2F;next(depending on &amp;gt;(location 0)) spot
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;C-o             # go back to where you came from
+&lt;&#x2F;span&gt;&lt;span&gt;C-i             # go forward to where you came from
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;gi              # go to the last edit&#x2F;insert position
+&lt;&#x2F;span&gt;&lt;span&gt;g;              # jump to the last change
+&lt;&#x2F;span&gt;&lt;span&gt;g,              # jump back through the change list
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h4 id=&quot;page&quot;&gt;page&lt;a class=&quot;zola-anchor&quot; href=&quot;#page&quot; aria-label=&quot;Anchor link for: page&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;^E          # the text moves upward in the screen, doesn&amp;#39;t change the current cursor line.
+&lt;&#x2F;span&gt;&lt;span&gt;H&#x2F;M&#x2F;L       # go to the topmost&#x2F;middle&#x2F;lowest line&#x2F;part of the screen contents.
+&lt;&#x2F;span&gt;&lt;span&gt;Ctrl-d&#x2F;u    # move half page down&#x2F;up
+&lt;&#x2F;span&gt;&lt;span&gt;C-f&#x2F;b       # one page down&#x2F;up
+&lt;&#x2F;span&gt;&lt;span&gt;zt          # put this line on top
+&lt;&#x2F;span&gt;&lt;span&gt;zb          # put this line on bottom
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;file-operations&quot;&gt;File operations&lt;a class=&quot;zola-anchor&quot; href=&quot;#file-operations&quot; aria-label=&quot;Anchor link for: file-operations&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;:g&#x2F;^&#x2F;m 0      # reverse all lines in file
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;==            # indent the line as of line above
+&lt;&#x2F;span&gt;&lt;span&gt;gg=G          # Reindent the whole file
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h4 id=&quot;sort&quot;&gt;sort&lt;a class=&quot;zola-anchor&quot; href=&quot;#sort&quot; aria-label=&quot;Anchor link for: sort&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;:sort         # Sorts the line 
+&lt;&#x2F;span&gt;&lt;span&gt;:sort!        # Sort in descending order
+&lt;&#x2F;span&gt;&lt;span&gt;:sort i       # Ignore case while sorting
+&lt;&#x2F;span&gt;&lt;span&gt;:sort u       # Remove duplicate lines
+&lt;&#x2F;span&gt;&lt;span&gt;:sort! ui     # Combining above options
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h4 id=&quot;state-changes&quot;&gt;state changes&lt;a class=&quot;zola-anchor&quot; href=&quot;#state-changes&quot; aria-label=&quot;Anchor link for: state-changes&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;u               # undo 
+&lt;&#x2F;span&gt;&lt;span&gt;Ctrl-r          # Redo 
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;:earlier [n]m   #  go back to n minutes earlier
+&lt;&#x2F;span&gt;&lt;span&gt;:later [n]m     # revert back the earlier changes
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h4 id=&quot;blocks-and-tags&quot;&gt;blocks and tags&lt;a class=&quot;zola-anchor&quot; href=&quot;#blocks-and-tags&quot; aria-label=&quot;Anchor link for: blocks-and-tags&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;ca&#x2F;i[(&#x2F;)[{}]]      #allows changes around,inside parenthesis&#x2F;blocks
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;da&#x2F;i[....]         #deletes around&#x2F;inside parenthesis&#x2F;blocks
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;[]yi&#x2F;a[blocks]    #to yank the content inside&#x2F;around of blocks
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;cit, dit, dat,cat  #allows changing and deleting in and aroung html like tags.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;[]ya&#x2F;is           #yanks around and inside sentence 
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h4 id=&quot;repeat-something&quot;&gt;repeat something&lt;a class=&quot;zola-anchor&quot; href=&quot;#repeat-something&quot; aria-label=&quot;Anchor link for: repeat-something&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;30i&#x2F;I&#x2F;a&#x2F;A   #horizontally
+&lt;&#x2F;span&gt;&lt;span&gt;3o&#x2F;O        #vertically     
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h4 id=&quot;case-changing&quot;&gt;case changing&lt;a class=&quot;zola-anchor&quot; href=&quot;#case-changing&quot; aria-label=&quot;Anchor link for: case-changing&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;&lt;em&gt;visual mode is easier&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;~           #change the case of the character
+&lt;&#x2F;span&gt;&lt;span&gt;g~w         #change the case of the word
+&lt;&#x2F;span&gt;&lt;span&gt;g~~         #change the case of the entire line
+&lt;&#x2F;span&gt;&lt;span&gt;gu&#x2F;Uw       #change the case of the word to either uppercase&#x2F;lowercase
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;visual-mode&quot;&gt;visual mode&lt;a class=&quot;zola-anchor&quot; href=&quot;#visual-mode&quot; aria-label=&quot;Anchor link for: visual-mode&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;gv         #selects the visual text again
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;viw&#x2F;W      #selects the word no matter where the cursor is
+&lt;&#x2F;span&gt;&lt;span&gt;yiw&#x2F;W   
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;vap        #visually select a paragraph
+&lt;&#x2F;span&gt;&lt;span&gt;vip        #visually select inside paragraph 
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;vi&#x2F;a[block]    #visual mode the content in&#x2F;around blocks.
+&lt;&#x2F;span&gt;&lt;span&gt;vi&#x2F;at          #visual mode the content in&#x2F;around tags.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;:w [file_name]        #writes the selected content to a new file.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;U&#x2F;u                   #changes the case to uppercase&#x2F;lowercase
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;:center&#x2F;right&#x2F;left    #align the visually selected text again.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;# o to toggle to top and bottom of the visually selected area
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;# programming
+&lt;&#x2F;span&gt;&lt;span&gt;press v and % sign to visually select the whole content&#x2F;function, ex {..}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;^#               # search every line starting with #
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h4 id=&quot;appending-inserting-things&quot;&gt;appending&#x2F;inserting things&lt;a class=&quot;zola-anchor&quot; href=&quot;#appending-inserting-things&quot; aria-label=&quot;Anchor link for: appending-inserting-things&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;CTRL-V to enter visual block mode 
+&lt;&#x2F;span&gt;&lt;span&gt;$ to move the cursor to the end of the line 
+&lt;&#x2F;span&gt;&lt;span&gt;A to append , I to prepend
+&lt;&#x2F;span&gt;&lt;span&gt;enter your text 
+&lt;&#x2F;span&gt;&lt;span&gt;ESC
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h4 id=&quot;column-of-increasing-numbers&quot;&gt;column of increasing numbers&lt;a class=&quot;zola-anchor&quot; href=&quot;#column-of-increasing-numbers&quot; aria-label=&quot;Anchor link for: column-of-increasing-numbers&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;&amp;lt;C-v&amp;gt;GI0 &amp;lt;ESC&amp;gt;gvg&amp;lt;C-a&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;C-v&amp;gt; visual block mode (:help visual-block)
+&lt;&#x2F;span&gt;&lt;span&gt;G is select to the bottom of the screen (:help G)
+&lt;&#x2F;span&gt;&lt;span&gt;I starts insert mode on line 1 (:help v_b_I)
+&lt;&#x2F;span&gt;&lt;span&gt;0  enter a literal zero and a literal space
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;ESC&amp;gt; go back to normal mode
+&lt;&#x2F;span&gt;&lt;span&gt;gv reselect the last visual selection (all of column 1) (:help gv)
+&lt;&#x2F;span&gt;&lt;span&gt;g&amp;lt;C-a&amp;gt; increment sequentially all numbers in the selection (:help v_g_CTRL-A
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;[no.]^x  : decrease the numerical value by 1
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;delete&quot;&gt;Delete&lt;a class=&quot;zola-anchor&quot; href=&quot;#delete&quot; aria-label=&quot;Anchor link for: delete&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;X       # delete the character before the cursor.
+&lt;&#x2F;span&gt;&lt;span&gt;x       # deletes the character at the cursor.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;dd      # deletes the whole line regardless of the cursor position.
+&lt;&#x2F;span&gt;&lt;span&gt;D       # deletes to the end of line
+&lt;&#x2F;span&gt;&lt;span&gt;C       # change to the end of the line  
+&lt;&#x2F;span&gt;&lt;span&gt;**c applies where d applies except it puts us in insert mode
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;daw     # delete a word(cursor postion doesn&amp;#39;t matter)
+&lt;&#x2F;span&gt;&lt;span&gt;dap     # delete a paragraph
+&lt;&#x2F;span&gt;&lt;span&gt;d{&#x2F;}    # deletes one paragraph up&#x2F;down
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;y,d&#x2F;..&#x2F;e      #yank&#x2F;delete till search pattern
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h4 id=&quot;pattern&quot;&gt;pattern&lt;a class=&quot;zola-anchor&quot; href=&quot;#pattern&quot; aria-label=&quot;Anchor link for: pattern&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;:g&#x2F;pattern&#x2F;d      #Delete all the lines matching the pattern
+&lt;&#x2F;span&gt;&lt;span&gt;:g!&#x2F;pattern&#x2F;d     #reverse of above
+&lt;&#x2F;span&gt;&lt;span&gt;:v&#x2F;pattern&#x2F;d  
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;:g&#x2F;^#&#x2F;d           #delete all the lines starting with #  g=&amp;gt;global d=&amp;gt;delete
+&lt;&#x2F;span&gt;&lt;span&gt;:g&#x2F;^\s*$&#x2F;d        #deleting all lines that are empty or that contain whitespace only
+&lt;&#x2F;span&gt;&lt;span&gt;:g!&#x2F;^\s*#&#x2F;d       #delete all the lines that are not comment
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;:v&#x2F;error\|warn\|fail&#x2F;d      # delete all lines except that contain error,warn or fail
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;:g&#x2F;^\s*\&#x2F;\&#x2F;.*$&#x2F;d
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;functions&quot;&gt;functions&lt;a class=&quot;zola-anchor&quot; href=&quot;#functions&quot; aria-label=&quot;Anchor link for: functions&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;#Generating numbered lists
+&lt;&#x2F;span&gt;&lt;span&gt;:put =range(1,10)
+&lt;&#x2F;span&gt;&lt;span&gt;:28put =range(6,87)   #insert numbers after a particular line number.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;#Generating IP address list
+&lt;&#x2F;span&gt;&lt;span&gt;:for i in range(1,100) | put =&amp;#39;192.168.0.&amp;#39;.i | endfor
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;:TOhtml     #make a html file using current color scheme
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;registers&quot;&gt;registers&lt;a class=&quot;zola-anchor&quot; href=&quot;#registers&quot; aria-label=&quot;Anchor link for: registers&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;&amp;quot;0p&#x2F;P     #paste the last yanked text&#x2F;line
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;[a-z]yy  #using named registers to yank characters.
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;ap&#x2F;P     #to paste the content of the named registers
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;Ayy      #append this content to the named a register, pasting as usual
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;:reg      #to look at the contents of all the registers
+&lt;&#x2F;span&gt;&lt;span&gt;:reg ab   #only to view the contents of a &amp;amp; b registers.
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;macros&quot;&gt;Macros&lt;a class=&quot;zola-anchor&quot; href=&quot;#macros&quot; aria-label=&quot;Anchor link for: macros&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;q[a&#x2F;.]      to start recording the macro to register a
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;normalize cursor position, make necessary changes in the line,
+&lt;&#x2F;span&gt;&lt;span&gt;escape it and press j&#x2F;k for motion, type q to stop recording the macro.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;@@          repeats the last macro used.
+&lt;&#x2F;span&gt;&lt;span&gt;:reg [m]    to see the contents inside of macro_register.
+&lt;&#x2F;span&gt;&lt;span&gt;@[a&#x2F;.]      use that macro on current line.
+&lt;&#x2F;span&gt;&lt;span&gt;[no]@[a&#x2F;.]  repeats the macro on [no.] of lines.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;q[A-Z]      to append to the previous macro recorded at [a-z]
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;:[s_no.],[e_no.] normal @[r_alphabet]     to apply macro to certain line ranges.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;dictionary-spelling&quot;&gt;Dictionary, spelling&lt;a class=&quot;zola-anchor&quot; href=&quot;#dictionary-spelling&quot; aria-label=&quot;Anchor link for: dictionary-spelling&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;:set spell      #to enable spell checking.
+&lt;&#x2F;span&gt;&lt;span&gt;]s              moves from one misspelled word to another.
+&lt;&#x2F;span&gt;&lt;span&gt;[s              moves to backward misspelled word.
+&lt;&#x2F;span&gt;&lt;span&gt;[]&#x2F;S            moves to real misspelled words, ignores regional dictionary&#x2F;spelling.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;z=          to see other spelling options for any word.
+&lt;&#x2F;span&gt;&lt;span&gt;zg          adds word to the dictionary(g=good)
+&lt;&#x2F;span&gt;&lt;span&gt;zug         undo adding words to the dictionary.
+&lt;&#x2F;span&gt;&lt;span&gt;zw          add any(correct&#x2F;not) word to the wrong dictionary.
+&lt;&#x2F;span&gt;&lt;span&gt;zuw         undo adding any(correct&#x2F;not) word to the wrong dictionary.
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;abbreviation&quot;&gt;abbreviation&lt;a class=&quot;zola-anchor&quot; href=&quot;#abbreviation&quot; aria-label=&quot;Anchor link for: abbreviation&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;#bp,  put it in vimrc 
+&lt;&#x2F;span&gt;&lt;span&gt;:abbr          # shows all abbreviations
+&lt;&#x2F;span&gt;&lt;span&gt;:abbr url pawanchhetri.com.np      
+&lt;&#x2F;span&gt;&lt;span&gt;url!           #   to expand
+&lt;&#x2F;span&gt;&lt;span&gt;:noabbr mws    # remove abbreviation 
+&lt;&#x2F;span&gt;&lt;span&gt;:iabbrev TRR Thanks,&amp;lt;CR&amp;gt;Regards,&amp;lt;CR&amp;gt;pawanchhetri
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;external-plugins&quot;&gt;External plugins&lt;a class=&quot;zola-anchor&quot; href=&quot;#external-plugins&quot; aria-label=&quot;Anchor link for: external-plugins&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;h4 id=&quot;vscode-vim-plugin&quot;&gt;vscode vim plugin&lt;a class=&quot;zola-anchor&quot; href=&quot;#vscode-vim-plugin&quot; aria-label=&quot;Anchor link for: vscode-vim-plugin&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;quot;vim.commandLineModeKeyBindings&amp;quot;: [
+&lt;&#x2F;span&gt;&lt;span&gt;        {
+&lt;&#x2F;span&gt;&lt;span&gt;            &amp;quot;before&amp;quot;: [&amp;quot;j&amp;quot;, &amp;quot;j&amp;quot;],
+&lt;&#x2F;span&gt;&lt;span&gt;            &amp;quot;after&amp;quot;: [&amp;quot;&amp;lt;esc&amp;gt;&amp;quot;]
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;    
+&lt;&#x2F;span&gt;&lt;span&gt;    ],
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;vim.normalModeKeyBindingsNonRecursive&amp;quot;: [
+&lt;&#x2F;span&gt;&lt;span&gt;    
+&lt;&#x2F;span&gt;&lt;span&gt;    ],
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;quot;files.autoSave&amp;quot;: &amp;quot;afterDelay&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;quot;window.menuBarVisibility&amp;quot;: &amp;quot;toggle&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;quot;editor.minimap.enabled&amp;quot;: false,
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;quot;workbench.startupEditor&amp;quot;: &amp;quot;newUntitledFile&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;quot;window.zoomLevel&amp;quot;: 1,
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;quot;editor.renderLineHighlight&amp;quot;: &amp;quot;none&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h4 id=&quot;vimium-browser-extension&quot;&gt;vimium browser extension&lt;a class=&quot;zola-anchor&quot; href=&quot;#vimium-browser-extension&quot; aria-label=&quot;Anchor link for: vimium-browser-extension&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;Insert your preferred key mappings here.
+&lt;&#x2F;span&gt;&lt;span&gt;unmap d
+&lt;&#x2F;span&gt;&lt;span&gt;map d removeTab
+&lt;&#x2F;span&gt;&lt;span&gt;map u restoreTab
+&lt;&#x2F;span&gt;&lt;span&gt;map K previousTab
+&lt;&#x2F;span&gt;&lt;span&gt;map J nextTab
+&lt;&#x2F;span&gt;&lt;span&gt;unmap &amp;lt;c-e&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;unmap &amp;lt;c-y&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;Excluded URLs and keys
+&lt;&#x2F;span&gt;&lt;span&gt;https?:&#x2F;&#x2F;www.youtube.com&#x2F;watch*    f
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;Custom search engines
+&lt;&#x2F;span&gt;&lt;span&gt;w: https:&#x2F;&#x2F;www.wikipedia.org&#x2F;w&#x2F;index.php?title=Special:Search&amp;amp;search=%s Wikipedia
+&lt;&#x2F;span&gt;&lt;span&gt;y: https:&#x2F;&#x2F;www.youtube.com&#x2F;results?search_query=%s Youtube
+&lt;&#x2F;span&gt;&lt;span&gt;d: https:&#x2F;&#x2F;duckduckgo.com&#x2F;?q=%s DuckDuckGo
+&lt;&#x2F;span&gt;&lt;span&gt;g: https:&#x2F;&#x2F;www.google.com&#x2F;search?q=%s Google
+&lt;&#x2F;span&gt;&lt;span&gt;r: https:&#x2F;&#x2F;www.reddit.com&#x2F;search&#x2F;?q=%s Reddit
+&lt;&#x2F;span&gt;&lt;span&gt;f: https:&#x2F;&#x2F;www.facebook.com&#x2F;search&#x2F;people&#x2F;?q=%s facebook people
+&lt;&#x2F;span&gt;&lt;span&gt;t: https:&#x2F;&#x2F;twitter.com&#x2F;search?q=%s&amp;amp;src=typed_query
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;sessions&quot;&gt;Sessions&lt;a class=&quot;zola-anchor&quot; href=&quot;#sessions&quot; aria-label=&quot;Anchor link for: sessions&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;:mksession!   #Vim records the current session in a Session.vim file in the current working directory.
+&lt;&#x2F;span&gt;&lt;span&gt;:vim -S       #Restores the previously recorded session.
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;templates&quot;&gt;templates&lt;a class=&quot;zola-anchor&quot; href=&quot;#templates&quot; aria-label=&quot;Anchor link for: templates&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;#Using file templates, for html, docker ... files
+&lt;&#x2F;span&gt;&lt;span&gt;$ mkdir ~&#x2F;.vim&#x2F;templates
+&lt;&#x2F;span&gt;&lt;span&gt;$ vi ~&#x2F;.vim&#x2F;templates&#x2F;html.tpl
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;html&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;head&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;title&amp;gt;&amp;lt;&#x2F;title&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;head&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;body&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;p&amp;gt;My content here.&amp;lt;&#x2F;p&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;body&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;html&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;#Add this to the .vimrc. to autoload this template every time new .html file is created
+&lt;&#x2F;span&gt;&lt;span&gt;:autocmd BufNewFile *.html 0r ~&#x2F;.vim&#x2F;templates&#x2F;html.tpl   
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;vimwiki&quot;&gt;vimwiki&lt;a class=&quot;zola-anchor&quot; href=&quot;#vimwiki&quot; aria-label=&quot;Anchor link for: vimwiki&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;Leader + ww    = open the vimwiki
+&lt;&#x2F;span&gt;&lt;span&gt;Leader + wt    = open the vimwiki in new tab
+&lt;&#x2F;span&gt;&lt;span&gt;Press enter on the wiki page text to create a link underneath
+&lt;&#x2F;span&gt;&lt;span&gt;[[ link_name ]]    = creates a link
+&lt;&#x2F;span&gt;&lt;span&gt;[[ link_name | display_name ]]  = display_name is dispalyed in the link name
+&lt;&#x2F;span&gt;&lt;span&gt;Tab&#x2F; Shift-Tab     = move to link_name down&#x2F;up 
+&lt;&#x2F;span&gt;&lt;span&gt;Backspace to get back to index.wiki from link page
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;1.&#x2F; a) &#x2F; *&#x2F; -     = creates list 
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;Todo lists
+&lt;&#x2F;span&gt;&lt;span&gt;Ctrl + space = add a checkbox
+&lt;&#x2F;span&gt;&lt;span&gt;Ctrl + space = toggle a checkbox
+&lt;&#x2F;span&gt;&lt;span&gt;gl + spcae = remove a checkbox
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;VimwikiDiary
+&lt;&#x2F;span&gt;&lt;span&gt;Leader + wi = open the diary in the wiki, sorts&#x2F;maintains diary on diary.wiki page
+&lt;&#x2F;span&gt;&lt;span&gt;Leader w Leader w = open&#x2F;create the diary for today
+&lt;&#x2F;span&gt;&lt;span&gt;Leader w Leader y = open&#x2F;create the diary for yesterday
+&lt;&#x2F;span&gt;&lt;span&gt;Leader w Leader m = open&#x2F;create the diary for tomorrow
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;extraa&quot;&gt;Extraa&lt;a class=&quot;zola-anchor&quot; href=&quot;#extraa&quot; aria-label=&quot;Anchor link for: extraa&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;:set paste          # allows pasting w&#x2F;o indentation mess
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;:h [^g&#x2F;:command&#x2F;topic]   # h is the short version of the help
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;z=    # opens up spell check dictionary
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;C-g  # show your location in the file and file status.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;daw   # delete a word(cursor postion doesn&amp;#39;t matter)
+&lt;&#x2F;span&gt;&lt;span&gt;dap   # delete a paragraph
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;xp    # to paste it afterward to fix spelling&#x2F;typing mistakes by swapping characters.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;C-x C-f for completing file names too, as well as
+&lt;&#x2F;span&gt;&lt;span&gt;C-x C-l for completing entire lines.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;cgn jumps to the next search match and applies c to it, letting you change the next search match. You can then press . to automatically replace the next match, and the next, and the next.  
+&lt;&#x2F;span&gt;&lt;span&gt;For small find and replaces I find it more convenient than using :s
+&lt;&#x2F;span&gt;&lt;span&gt;search something first  type cgn make changes to it and then . to make changes to other matches one by one.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;I find the ability to insert command output into my file very useful using &amp;quot;bang bang&amp;quot; (!!) in command mode really useful: !!command will put that commands output right at your cursor&amp;#39;s location. You can even use a pipeline and it will put in the end of the pipe&amp;#39;s output there. Something like: 
+&lt;&#x2F;span&gt;&lt;span&gt;!!cut -d&amp;#39; &amp;#39; -f2 filename|sort|uniq 
+&lt;&#x2F;span&gt;&lt;span&gt;will work just fine. This has saved me time and let me avoid using temp files.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;C-f   while on command modes : shows the recent command history as a vim page
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;:%s&#x2F;old&#x2F;new&#x2F;gc  # substitute with prompt
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;amp;   = repeat last substitution, in the current line
+&lt;&#x2F;span&gt;&lt;span&gt;g&amp;amp;  = repeat last substitution on all lines 
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;hr &#x2F;&gt;
+&lt;p&gt;&lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;web.archive.org&#x2F;web&#x2F;20070814184957&#x2F;http:&#x2F;&#x2F;www.moolenaar.net&#x2F;habits.html&quot;&gt;Seven habits of effective text editing: Bram Moolenaar&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;div class=&quot;footnote-definition&quot; id=&quot;1&quot;&gt;&lt;sup class=&quot;footnote-definition-label&quot;&gt;1&lt;&#x2F;sup&gt;
+&lt;p&gt;https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=37082377&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;
+</content>
+        
+    </entry>
     <entry xml:lang="en">
         <title>Homelab Setup</title>
         <published>2023-09-28T00:00:00+00:00</published>
@@ -20,18 +388,6 @@
         <content type="html">&lt;p&gt;    After using my trusty old laptop for nearly 5 to 6 years, I noticed it had started making fan noises, even right after a fresh boot-up. Rather than retiring it or letting it gather dust, I decided to give it a new  life by transforming it into a personal homelab server. Leveraging the power of &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;developers.cloudflare.com&#x2F;cloudflare-one&#x2F;&quot;&gt;Cloudflare Zero Trust&lt;&#x2F;a&gt; and a collection of Docker containers, I embarked on a journey to create a versatile homelab environment.&lt;&#x2F;p&gt;
 &lt;p&gt;    Within this homelab, I’ve set up a range of essential services that make daily life more enjoyable and efficient. These include a media player for movies, a music and audiobook player, a book reader, server monitoring tool, webpage monitoring capabilities, and a &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;homepage.pawanchhetri.com.np&quot;&gt;nice looking homepage&lt;&#x2F;a&gt; accessible from virtually any device. What makes these services truly exceptional is their ability to accommodate multiple users, allowing family and friends to join in on the experience from anywhere.&lt;&#x2F;p&gt;
 &lt;p&gt;    To make your homelab setup as smooth as possible, I’ve  provided all the Docker Compose files you’ll need for each of these services. With them, you’ll be up and running in no time, ready to unlock the full potential of your homelab server. So, let’s dive in and see how each services  with respective docker-compose stack looks like.&lt;&#x2F;p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;blog&#x2F;cloudflare-zero-trust&#x2F;#homepage&quot;&gt;Homepage&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;blog&#x2F;cloudflare-zero-trust&#x2F;#grafana-prometheus-nodeexporter-cadvisor&quot;&gt;Grafana, Prometheus, nodeexporter, cadvisor&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;blog&#x2F;cloudflare-zero-trust&#x2F;#portainer&quot;&gt;Portainer&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;blog&#x2F;cloudflare-zero-trust&#x2F;#uptime-kuma&quot;&gt;uptime-kuma&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;blog&#x2F;cloudflare-zero-trust&#x2F;#jellyfin&quot;&gt;Jellyfin&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;blog&#x2F;cloudflare-zero-trust&#x2F;#qbittorrent&quot;&gt;Qbittorrent&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;blog&#x2F;cloudflare-zero-trust&#x2F;#navidrome&quot;&gt;Navidrome&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;blog&#x2F;cloudflare-zero-trust&#x2F;#audiobookshelf&quot;&gt;Audiobookshelf&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;blog&#x2F;cloudflare-zero-trust&#x2F;#kavita&quot;&gt;Kavita&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;blog&#x2F;cloudflare-zero-trust&#x2F;#setup-requirements-and-best-practices&quot;&gt;Setup Requirements&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;&#x2F;ul&gt;
 &lt;br &#x2F;&gt;
 &lt;h4 id=&quot;homepage&quot;&gt;&lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;homepage.pawanchhetri.com.np&quot;&gt;Homepage&lt;&#x2F;a&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#homepage&quot; aria-label=&quot;Anchor link for: homepage&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
 &lt;p&gt;Homelab bookmarks tab, access all the self hosted services and more from this page. Allows fancy graphics and stuff too but I’ve gone only text based with minimal bookmarks.yml file configuration.&lt;&#x2F;p&gt;
@@ -490,7 +846,6 @@ Btw, our web server is up.&lt;&#x2F;p&gt;
 &lt;img src=&quot;&#x2F;images&#x2F;2023-04-12-17-05-32.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
 &lt;p&gt;If we refresh the aws console, it says that web server is terminated, which gets removed after a while.&lt;img src=&quot;&#x2F;images&#x2F;2023-04-12-17-06-37.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
 &lt;p&gt;   You can add more stuffs to both the terraform and ansible files above to do much more. &lt;&#x2F;p&gt;
-&lt;p&gt;&lt;strong&gt;Images above are scraped through kodekloud,google except screenshots&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
 </content>
         
     </entry>

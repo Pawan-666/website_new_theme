@@ -1,0 +1,294 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta content="width=device-width,initial-scale=1.0" name=viewport><meta content="light dark" name=color-scheme><title>Vim cheatsheet | The Oops Guy</title><meta content="Vim cheatsheet" property=og:title><meta content="Pawan Chhetri" name=author><meta content=en-US property=og:locale><meta content="terraform and ansible, one after other" name=description><meta content="terraform and ansible, one after other" property=og:description><link href=https://pawanchhetri.com.np/blog/vim-cheatsheet/ rel=canonical><meta content=https://pawanchhetri.com.np/blog/vim-cheatsheet/ property=og:url><meta content="The Oops Guy" property=og:site_name><meta content=article property=og:type><meta content=2024-06-03T00:00:00+00:00 property=article:published_time><meta content=summary name=twitter:card><meta content="Vim cheatsheet" property=twitter:title><meta content="terraform and ansible, one after other" name=description><title>Vim cheatsheet</title><link href=/img/favicon-32x32.png rel=icon sizes=32x32 type=image/png><link href=/img/favicon-16x16.png rel=icon sizes=16x16 type=image/png><link href=/img/apple-touch-icon.png rel=apple-touch-icon sizes=180x180><style>body{--primary-color:#376dd9;--primary-pale-color:#698bcf1c;--inline-code-color:#444;--text-color:#444;--text-pale-color:#545967;--bg-color:#fff;--highlight-mark-color:#5f75b045;--callout-note-color:#3e70d6;--callout-important-color:#7a46cd;--callout-warning-color:#d3822b;--callout-alert-color:#d43f3f;--callout-question-color:#3089b5;--callout-tip-color:#35a06b;--main-font:"IBMPlexSans",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";--code-font:"IBMPlexMono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;--homepage-max-width:750px;--main-max-width:750px;--avatar-size:175px;--paragraph-font-size:16px;--paragraph-line-height:1.5em;--aside-font-size:16px;--img-border-radius:4px;--inline-code-border-radius:2px}body.dark{--primary-color:#689afd;--primary-pale-color:#93acdd1c;--inline-code-color:#d2d2d2;--text-color:#ddd;--text-pale-color:#a0a0a0;--bg-color:#202124;--highlight-mark-color:#5f75b045;--callout-note-color:#698bcf;--callout-important-color:#9374c5;--callout-warning-color:#c99054;--callout-alert-color:#d35757;--callout-question-color:#5091b2;--callout-tip-color:#3ea06f}</style><link href=/main.css rel=stylesheet><body class=post><script>if(localStorage.getItem('theme')=='dark'){document.body.classList.add('dark');const a=document.querySelector('link#hl');if(a)a.href='/hl-dark.css'}</script><header class=blur><div id=header-wrapper><nav><a href=/>The Oops guy</a><button aria-label="toggle expand" class=separator id=toggler>::</button><span class="wrap left fold">{</span><a href=/blog>blog</a><span class="wrap-separator fold">,</span><a class=fold href=/projects>projects</a><span class="wrap right fold">} ;</span></nav><div id=btns><a aria-label="rss feed" href=/blog/atom.xml><svg viewbox="0 0 24 24" height=24 width=24 xmlns=http://www.w3.org/2000/svg><path d="M3 17C5.20914 17 7 18.7909 7 21H3V17ZM3 10C9.07513 10 14 14.9249 14 21H12C12 16.0294 7.97056 12 3 12V10ZM3 3C12.9411 3 21 11.0589 21 21H19C19 12.1634 11.8366 5 3 5V3Z" fill=currentColor></path></svg></a><a rel="noreferrer noopener" aria-label=GitHub href=https://github.com/Pawan-666 target=_blank> <svg viewbox="0 0 24 24" xmlns=http://www.w3.org/2000/svg><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" fill=currentColor></path></svg> </a><a rel="noreferrer noopener" aria-label=Twitter href=https://twitter.com/PawanCh09197754 target=_blank> <svg viewbox="0 0 24 24" xmlns=http://www.w3.org/2000/svg><title>Twitter</title><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" fill=currentColor></path></svg> </a><a rel="noreferrer noopener" aria-label=LinkedIn href=https://www.linkedin.com/in/pawan-chhetri-a91821169/ target=_blank> <svg viewbox="0 0 24 24" xmlns=http://www.w3.org/2000/svg><title>LinkedIn</title><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" fill=currentColor></path></svg> </a><button aria-label="theme switch" data-moon-icon='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>' data-sun-icon='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>' id=theme-toggle><svg viewbox="0 0 24 24" height=24 width=24 xmlns=http://www.w3.org/2000/svg><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill=currentColor></path></svg></button><button aria-label="table of content" id=toc-toggle><svg viewbox="0 0 24 24" height=24 width=24 xmlns=http://www.w3.org/2000/svg><path d="M3 4H21V6H3V4ZM3 11H15V13H3V11ZM3 18H21V20H3V18Z" fill=currentColor></path></svg></button></div></div></header><div id=wrapper><div id=blank></div><aside class=blur><nav><ul><li><a class=h2 href=#movements>movements</a> <ul><li><a class=h3 href=#linewise>linewise</a><li><a class=h3 href=#page>page</a></ul><li><a class=h2 href=#file-operations>File operations</a> <ul><li><a class=h3 href=#sort>sort</a><li><a class=h3 href=#state-changes>state changes</a><li><a class=h3 href=#blocks-and-tags>blocks and tags</a><li><a class=h3 href=#repeat-something>repeat something</a><li><a class=h3 href=#case-changing>case changing</a></ul><li><a class=h2 href=#visual-mode>visual mode</a> <ul><li><a class=h3 href=#appending-inserting-things>appending/inserting things</a><li><a class=h3 href=#column-of-increasing-numbers>column of increasing numbers</a></ul><li><a class=h2 href=#delete>Delete</a> <ul><li><a class=h3 href=#pattern>pattern</a></ul><li><a class=h2 href=#functions>functions</a><li><a class=h2 href=#registers>registers</a><li><a class=h2 href=#macros>Macros</a><li><a class=h2 href=#dictionary-spelling>Dictionary, spelling</a><li><a class=h2 href=#abbreviation>abbreviation</a><li><a class=h2 href=#external-plugins>External plugins</a> <ul><li><a class=h3 href=#vscode-vim-plugin>vscode vim plugin</a><li><a class=h3 href=#vimium-browser-extension>vimium browser extension</a></ul><li><a class=h2 href=#sessions>Sessions</a><li><a class=h2 href=#templates>templates</a><li><a class=h2 href=#vimwiki>vimwiki</a><li><a class=h2 href=#extraa>Extraa</a></ul></nav><button aria-label="back to top" id=back-to-top><svg viewbox="0 0 24 24" height=24 width=24 xmlns=http://www.w3.org/2000/svg><path d="M11.9997 10.8284L7.04996 15.7782L5.63574 14.364L11.9997 8L18.3637 14.364L16.9495 15.7782L11.9997 10.8284Z" fill=currentColor></path></svg></button></aside><main><div><div data-check-icon='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z" fill="currentColor"></path></svg>' data-copy-icon='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z" fill="currentColor"></path></svg>' id=copy-cfg style=display:none></div><article data-backlink-icon='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"><path d="M9.41421 8L18.0208 16.6066L16.6066 18.0208L8 9.41421V17H6V6H17V8H9.41421Z" fill="currentColor"></path></svg>' class=prose><h1>Vim cheatsheet</h1><div id=post-info><div id=date><span id=publish>2024-06-03</span></div><div id=tags><a href=https://pawanchhetri.com.np/tags/vim><span>#</span>vim</a><a href=https://pawanchhetri.com.np/tags/vimium><span>#</span>vimium</a><a href=https://pawanchhetri.com.np/tags/neovim><span>#</span>neovim</a><a href=https://pawanchhetri.com.np/tags/lvim><span>#</span>lvim</a><a href=https://pawanchhetri.com.np/tags/terminal><span>#</span>terminal</a></div></div><p>Vim has soul. It is that chisel you inherited from your grandpa that you keep using. It fits well in your grip and is comfortable, even though it lacks the soft rubber that the new ones in the store have. It’s a tool with its own history.<sup class=footnote-reference><a href=#1>1</a></sup><p>I’ve been using <a rel="nofollow noreferrer" href=https://www.vim.org/>Vim</a> since I started with Linux, and it quickly became one of the tools that drew me to the platform. As a terminal-based text editor derived from vi, which dates back to 1977, Vim (or vi) is typically pre-installed on Unix systems, making it a common encounter for anyone working with Unix terminals.<p>While I currently use Neovim, the core principles remain the same. Once you become proficient with the basic movements, Vim’s verbs, and modes, the keybindings become second nature. However, reaching this level of proficiency requires a solid initial understanding. More importantly, I choose Vim not only for its efficiency but also because it makes programming and text editing genuinely enjoyable.<p>Down the years I’ve noted some of the most used vim motions and commands I’ve been using.<h3 id=movements>movements<a aria-label="Anchor link for: movements" class=zola-anchor href=#movements>#</a></h3><pre style=background:#2e3440;color:#d8dee9><code><span>%       # go to other end of parenthesis
+</span><span>*       # next match the current instance under the cursor( replaces the search string, thus n N work)
+</span><span>#       # previous match of the current instance under the cursor
+</span><span>+       # beginning of the next line, non-whitespace
+</span><span>-       #  beginning of the previous line
+</span><span>(       #  beginning of sentence/ previous
+</span><span>)       # end of sentence
+</span><span>{       # go to the beginning of current paragraph
+</span><span>}       # go to the beginning of next paragraph
+</span><span>g_      # go to the last non-whitespace character
+</span><span>
+</span><span>
+</span><span>f[.]    #searches linewise and to repeat that linewise search use a semicolon ;  
+</span><span>        #comma , does the backward searching.
+</span><span>
+</span><span>F[.]    #searches linewise in backward direction.
+</span><span>
+</span><span>:marks  #m[..]  marks and '[..] to go to that marked position
+</span><span>
+</span></code></pre><h4 id=linewise>linewise<a aria-label="Anchor link for: linewise" class=zola-anchor href=#linewise>#</a></h4><pre style=background:#2e3440;color:#d8dee9><code><span>[n0]G/gg  : go to that line
+</span><span>      same as :[n0]&LTEnter>
+</span><span>
+</span><span>:jumps    
+</span><span>[no.]Ctrl-o/i   # jump no.     to the previous/next(depending on >(location 0)) spot
+</span><span>
+</span><span>C-o             # go back to where you came from
+</span><span>C-i             # go forward to where you came from
+</span><span>
+</span><span>gi              # go to the last edit/insert position
+</span><span>g;              # jump to the last change
+</span><span>g,              # jump back through the change list
+</span></code></pre><h4 id=page>page<a aria-label="Anchor link for: page" class=zola-anchor href=#page>#</a></h4><pre style=background:#2e3440;color:#d8dee9><code><span>^E          # the text moves upward in the screen, doesn't change the current cursor line.
+</span><span>H/M/L       # go to the topmost/middle/lowest line/part of the screen contents.
+</span><span>Ctrl-d/u    # move half page down/up
+</span><span>C-f/b       # one page down/up
+</span><span>zt          # put this line on top
+</span><span>zb          # put this line on bottom
+</span></code></pre><h3 id=file-operations>File operations<a aria-label="Anchor link for: file-operations" class=zola-anchor href=#file-operations>#</a></h3><pre style=background:#2e3440;color:#d8dee9><code><span>:g/^/m 0      # reverse all lines in file
+</span><span>
+</span><span>==            # indent the line as of line above
+</span><span>gg=G          # Reindent the whole file
+</span></code></pre><h4 id=sort>sort<a aria-label="Anchor link for: sort" class=zola-anchor href=#sort>#</a></h4><pre style=background:#2e3440;color:#d8dee9><code><span>:sort         # Sorts the line 
+</span><span>:sort!        # Sort in descending order
+</span><span>:sort i       # Ignore case while sorting
+</span><span>:sort u       # Remove duplicate lines
+</span><span>:sort! ui     # Combining above options
+</span></code></pre><h4 id=state-changes>state changes<a aria-label="Anchor link for: state-changes" class=zola-anchor href=#state-changes>#</a></h4><pre style=background:#2e3440;color:#d8dee9><code><span>u               # undo 
+</span><span>Ctrl-r          # Redo 
+</span><span>
+</span><span>:earlier [n]m   #  go back to n minutes earlier
+</span><span>:later [n]m     # revert back the earlier changes
+</span><span>
+</span></code></pre><h4 id=blocks-and-tags>blocks and tags<a aria-label="Anchor link for: blocks-and-tags" class=zola-anchor href=#blocks-and-tags>#</a></h4><pre style=background:#2e3440;color:#d8dee9><code><span>ca/i[(/)[{}]]      #allows changes around,inside parenthesis/blocks
+</span><span>
+</span><span>da/i[....]         #deletes around/inside parenthesis/blocks
+</span><span>
+</span><span>"[]yi/a[blocks]    #to yank the content inside/around of blocks
+</span><span>
+</span><span>cit, dit, dat,cat  #allows changing and deleting in and aroung html like tags.
+</span><span>
+</span><span>"[]ya/is           #yanks around and inside sentence 
+</span></code></pre><h4 id=repeat-something>repeat something<a aria-label="Anchor link for: repeat-something" class=zola-anchor href=#repeat-something>#</a></h4><pre style=background:#2e3440;color:#d8dee9><code><span>30i/I/a/A   #horizontally
+</span><span>3o/O        #vertically     
+</span></code></pre><h4 id=case-changing>case changing<a aria-label="Anchor link for: case-changing" class=zola-anchor href=#case-changing>#</a></h4><p><em>visual mode is easier</em><pre style=background:#2e3440;color:#d8dee9><code><span>~           #change the case of the character
+</span><span>g~w         #change the case of the word
+</span><span>g~~         #change the case of the entire line
+</span><span>gu/Uw       #change the case of the word to either uppercase/lowercase
+</span><span>
+</span></code></pre><h3 id=visual-mode>visual mode<a aria-label="Anchor link for: visual-mode" class=zola-anchor href=#visual-mode>#</a></h3><pre style=background:#2e3440;color:#d8dee9><code><span>gv         #selects the visual text again
+</span><span>
+</span><span>viw/W      #selects the word no matter where the cursor is
+</span><span>yiw/W   
+</span><span>
+</span><span>vap        #visually select a paragraph
+</span><span>vip        #visually select inside paragraph 
+</span><span>
+</span><span>vi/a[block]    #visual mode the content in/around blocks.
+</span><span>vi/at          #visual mode the content in/around tags.
+</span><span>
+</span><span>
+</span><span>:w [file_name]        #writes the selected content to a new file.
+</span><span>
+</span><span>U/u                   #changes the case to uppercase/lowercase
+</span><span>
+</span><span>:center/right/left    #align the visually selected text again.
+</span><span>
+</span><span># o to toggle to top and bottom of the visually selected area
+</span><span>
+</span><span># programming
+</span><span>press v and % sign to visually select the whole content/function, ex {..}
+</span><span>
+</span><span>/^#               # search every line starting with #
+</span><span>
+</span></code></pre><h4 id=appending-inserting-things>appending/inserting things<a aria-label="Anchor link for: appending-inserting-things" class=zola-anchor href=#appending-inserting-things>#</a></h4><pre style=background:#2e3440;color:#d8dee9><code><span>CTRL-V to enter visual block mode 
+</span><span>$ to move the cursor to the end of the line 
+</span><span>A to append , I to prepend
+</span><span>enter your text 
+</span><span>ESC
+</span><span>
+</span></code></pre><h4 id=column-of-increasing-numbers>column of increasing numbers<a aria-label="Anchor link for: column-of-increasing-numbers" class=zola-anchor href=#column-of-increasing-numbers>#</a></h4><pre style=background:#2e3440;color:#d8dee9><code><span>&LTC-v>GI0 &LTESC>gvg&LTC-a>
+</span><span>&LTC-v> visual block mode (:help visual-block)
+</span><span>G is select to the bottom of the screen (:help G)
+</span><span>I starts insert mode on line 1 (:help v_b_I)
+</span><span>0  enter a literal zero and a literal space
+</span><span>&LTESC> go back to normal mode
+</span><span>gv reselect the last visual selection (all of column 1) (:help gv)
+</span><span>g&LTC-a> increment sequentially all numbers in the selection (:help v_g_CTRL-A
+</span><span>
+</span><span>[no.]^x  : decrease the numerical value by 1
+</span></code></pre><h3 id=delete>Delete<a aria-label="Anchor link for: delete" class=zola-anchor href=#delete>#</a></h3><pre style=background:#2e3440;color:#d8dee9><code><span>X       # delete the character before the cursor.
+</span><span>x       # deletes the character at the cursor.
+</span><span>
+</span><span>dd      # deletes the whole line regardless of the cursor position.
+</span><span>D       # deletes to the end of line
+</span><span>C       # change to the end of the line  
+</span><span>**c applies where d applies except it puts us in insert mode
+</span><span>
+</span><span>daw     # delete a word(cursor postion doesn't matter)
+</span><span>dap     # delete a paragraph
+</span><span>d{/}    # deletes one paragraph up/down
+</span><span>
+</span><span>y,d/../e      #yank/delete till search pattern
+</span></code></pre><h4 id=pattern>pattern<a aria-label="Anchor link for: pattern" class=zola-anchor href=#pattern>#</a></h4><pre style=background:#2e3440;color:#d8dee9><code><span>:g/pattern/d      #Delete all the lines matching the pattern
+</span><span>:g!/pattern/d     #reverse of above
+</span><span>:v/pattern/d  
+</span><span>
+</span><span>:g/^#/d           #delete all the lines starting with #  g=>global d=>delete
+</span><span>:g/^\s*$/d        #deleting all lines that are empty or that contain whitespace only
+</span><span>:g!/^\s*#/d       #delete all the lines that are not comment
+</span><span>
+</span><span>:v/error\|warn\|fail/d      # delete all lines except that contain error,warn or fail
+</span><span>
+</span><span>:g/^\s*\/\/.*$/d
+</span><span>
+</span><span>
+</span></code></pre><h3 id=functions>functions<a aria-label="Anchor link for: functions" class=zola-anchor href=#functions>#</a></h3><pre style=background:#2e3440;color:#d8dee9><code><span>#Generating numbered lists
+</span><span>:put =range(1,10)
+</span><span>:28put =range(6,87)   #insert numbers after a particular line number.
+</span><span>
+</span><span>#Generating IP address list
+</span><span>:for i in range(1,100) | put ='192.168.0.'.i | endfor
+</span><span>
+</span><span>:TOhtml     #make a html file using current color scheme
+</span></code></pre><h3 id=registers>registers<a aria-label="Anchor link for: registers" class=zola-anchor href=#registers>#</a></h3><pre style=background:#2e3440;color:#d8dee9><code><span>"0p/P     #paste the last yanked text/line
+</span><span>"[a-z]yy  #using named registers to yank characters.
+</span><span>"ap/P     #to paste the content of the named registers
+</span><span>
+</span><span>"Ayy      #append this content to the named a register, pasting as usual
+</span><span>
+</span><span>:reg      #to look at the contents of all the registers
+</span><span>:reg ab   #only to view the contents of a & b registers.
+</span></code></pre><h3 id=macros>Macros<a aria-label="Anchor link for: macros" class=zola-anchor href=#macros>#</a></h3><pre style=background:#2e3440;color:#d8dee9><code><span>q[a/.]      to start recording the macro to register a
+</span><span>
+</span><span>normalize cursor position, make necessary changes in the line,
+</span><span>escape it and press j/k for motion, type q to stop recording the macro.
+</span><span>
+</span><span>@@          repeats the last macro used.
+</span><span>:reg [m]    to see the contents inside of macro_register.
+</span><span>@[a/.]      use that macro on current line.
+</span><span>[no]@[a/.]  repeats the macro on [no.] of lines.
+</span><span>
+</span><span>q[A-Z]      to append to the previous macro recorded at [a-z]
+</span><span>
+</span><span>:[s_no.],[e_no.] normal @[r_alphabet]     to apply macro to certain line ranges.
+</span><span>
+</span></code></pre><h3 id=dictionary-spelling>Dictionary, spelling<a aria-label="Anchor link for: dictionary-spelling" class=zola-anchor href=#dictionary-spelling>#</a></h3><pre style=background:#2e3440;color:#d8dee9><code><span>:set spell      #to enable spell checking.
+</span><span>]s              moves from one misspelled word to another.
+</span><span>[s              moves to backward misspelled word.
+</span><span>[]/S            moves to real misspelled words, ignores regional dictionary/spelling.
+</span><span>
+</span><span>z=          to see other spelling options for any word.
+</span><span>zg          adds word to the dictionary(g=good)
+</span><span>zug         undo adding words to the dictionary.
+</span><span>zw          add any(correct/not) word to the wrong dictionary.
+</span><span>zuw         undo adding any(correct/not) word to the wrong dictionary.
+</span></code></pre><h3 id=abbreviation>abbreviation<a aria-label="Anchor link for: abbreviation" class=zola-anchor href=#abbreviation>#</a></h3><pre style=background:#2e3440;color:#d8dee9><code><span>#bp,  put it in vimrc 
+</span><span>:abbr          # shows all abbreviations
+</span><span>:abbr url pawanchhetri.com.np      
+</span><span>url!           #   to expand
+</span><span>:noabbr mws    # remove abbreviation 
+</span><span>:iabbrev TRR Thanks,&LTCR>Regards,&LTCR>pawanchhetri
+</span></code></pre><h3 id=external-plugins>External plugins<a aria-label="Anchor link for: external-plugins" class=zola-anchor href=#external-plugins>#</a></h3><h4 id=vscode-vim-plugin>vscode vim plugin<a aria-label="Anchor link for: vscode-vim-plugin" class=zola-anchor href=#vscode-vim-plugin>#</a></h4><pre style=background:#2e3440;color:#d8dee9><code><span>{
+</span><span>    "vim.commandLineModeKeyBindings": [
+</span><span>        {
+</span><span>            "before": ["j", "j"],
+</span><span>            "after": ["&LTesc>"]
+</span><span>        }
+</span><span>    
+</span><span>    ],
+</span><span>  "vim.normalModeKeyBindingsNonRecursive": [
+</span><span>    
+</span><span>    ],
+</span><span>    "files.autoSave": "afterDelay",
+</span><span>    "window.menuBarVisibility": "toggle",
+</span><span>    "editor.minimap.enabled": false,
+</span><span>    "workbench.startupEditor": "newUntitledFile",
+</span><span>    "window.zoomLevel": 1,
+</span><span>    "editor.renderLineHighlight": "none",
+</span><span>}
+</span></code></pre><h4 id=vimium-browser-extension>vimium browser extension<a aria-label="Anchor link for: vimium-browser-extension" class=zola-anchor href=#vimium-browser-extension>#</a></h4><pre style=background:#2e3440;color:#d8dee9><code><span>Insert your preferred key mappings here.
+</span><span>unmap d
+</span><span>map d removeTab
+</span><span>map u restoreTab
+</span><span>map K previousTab
+</span><span>map J nextTab
+</span><span>unmap &LTc-e>
+</span><span>unmap &LTc-y>
+</span><span>
+</span><span>Excluded URLs and keys
+</span><span>https?://www.youtube.com/watch*    f
+</span><span>
+</span><span>Custom search engines
+</span><span>w: https://www.wikipedia.org/w/index.php?title=Special:Search&search=%s Wikipedia
+</span><span>y: https://www.youtube.com/results?search_query=%s Youtube
+</span><span>d: https://duckduckgo.com/?q=%s DuckDuckGo
+</span><span>g: https://www.google.com/search?q=%s Google
+</span><span>r: https://www.reddit.com/search/?q=%s Reddit
+</span><span>f: https://www.facebook.com/search/people/?q=%s facebook people
+</span><span>t: https://twitter.com/search?q=%s&src=typed_query
+</span><span>
+</span></code></pre><h3 id=sessions>Sessions<a aria-label="Anchor link for: sessions" class=zola-anchor href=#sessions>#</a></h3><pre style=background:#2e3440;color:#d8dee9><code><span>:mksession!   #Vim records the current session in a Session.vim file in the current working directory.
+</span><span>:vim -S       #Restores the previously recorded session.
+</span></code></pre><h3 id=templates>templates<a aria-label="Anchor link for: templates" class=zola-anchor href=#templates>#</a></h3><pre style=background:#2e3440;color:#d8dee9><code><span>#Using file templates, for html, docker ... files
+</span><span>$ mkdir ~/.vim/templates
+</span><span>$ vi ~/.vim/templates/html.tpl
+</span><span>
+</span><span>&LThtml>
+</span><span>  &LThead>
+</span><span>    &LTtitle>&LT/title>
+</span><span>  &LT/head>
+</span><span>  &LTbody>
+</span><span>    &LTp>My content here.&LT/p>
+</span><span>  &LT/body>
+</span><span>&LT/html>
+</span><span>
+</span><span>#Add this to the .vimrc. to autoload this template every time new .html file is created
+</span><span>:autocmd BufNewFile *.html 0r ~/.vim/templates/html.tpl   
+</span><span>
+</span></code></pre><h3 id=vimwiki>vimwiki<a aria-label="Anchor link for: vimwiki" class=zola-anchor href=#vimwiki>#</a></h3><pre style=background:#2e3440;color:#d8dee9><code><span>Leader + ww    = open the vimwiki
+</span><span>Leader + wt    = open the vimwiki in new tab
+</span><span>Press enter on the wiki page text to create a link underneath
+</span><span>[[ link_name ]]    = creates a link
+</span><span>[[ link_name | display_name ]]  = display_name is dispalyed in the link name
+</span><span>Tab/ Shift-Tab     = move to link_name down/up 
+</span><span>Backspace to get back to index.wiki from link page
+</span><span>
+</span><span>1./ a) / */ -     = creates list 
+</span><span>
+</span><span>Todo lists
+</span><span>Ctrl + space = add a checkbox
+</span><span>Ctrl + space = toggle a checkbox
+</span><span>gl + spcae = remove a checkbox
+</span><span>
+</span><span>
+</span><span>
+</span><span>VimwikiDiary
+</span><span>Leader + wi = open the diary in the wiki, sorts/maintains diary on diary.wiki page
+</span><span>Leader w Leader w = open/create the diary for today
+</span><span>Leader w Leader y = open/create the diary for yesterday
+</span><span>Leader w Leader m = open/create the diary for tomorrow
+</span><span>
+</span></code></pre><h3 id=extraa>Extraa<a aria-label="Anchor link for: extraa" class=zola-anchor href=#extraa>#</a></h3><pre style=background:#2e3440;color:#d8dee9><code><span>:set paste          # allows pasting w/o indentation mess
+</span><span>
+</span><span>:h [^g/:command/topic]   # h is the short version of the help
+</span><span>
+</span><span>z=    # opens up spell check dictionary
+</span><span>
+</span><span>C-g  # show your location in the file and file status.
+</span><span>
+</span><span>daw   # delete a word(cursor postion doesn't matter)
+</span><span>dap   # delete a paragraph
+</span><span>
+</span><span>xp    # to paste it afterward to fix spelling/typing mistakes by swapping characters.
+</span><span>
+</span><span>C-x C-f for completing file names too, as well as
+</span><span>C-x C-l for completing entire lines.
+</span><span>
+</span><span>cgn jumps to the next search match and applies c to it, letting you change the next search match. You can then press . to automatically replace the next match, and the next, and the next.  
+</span><span>For small find and replaces I find it more convenient than using :s
+</span><span>search something first  type cgn make changes to it and then . to make changes to other matches one by one.
+</span><span>
+</span><span>
+</span><span>I find the ability to insert command output into my file very useful using "bang bang" (!!) in command mode really useful: !!command will put that commands output right at your cursor's location. You can even use a pipeline and it will put in the end of the pipe's output there. Something like: 
+</span><span>!!cut -d' ' -f2 filename|sort|uniq 
+</span><span>will work just fine. This has saved me time and let me avoid using temp files.
+</span><span>
+</span><span>C-f   while on command modes : shows the recent command history as a vim page
+</span><span>
+</span><span>:%s/old/new/gc  # substitute with prompt
+</span><span>&   = repeat last substitution, in the current line
+</span><span>g&  = repeat last substitution on all lines 
+</span><span>
+</span><span>
+</span></code></pre><hr><p><a rel="nofollow noreferrer" href=https://web.archive.org/web/20070814184957/http://www.moolenaar.net/habits.html>Seven habits of effective text editing: Bram Moolenaar</a><hr><div class=footnote-definition id=1><sup class=footnote-definition-label>1</sup><p>https://news.ycombinator.com/item?id=37082377</div></article><div class=giscus></div><script async crossorigin data-category=General data-category-id=DIC_kwDOL6heGM4CfTnr data-emit-metadata=0 data-input-position=bottom data-lang=en data-loading=lazy data-mapping=pathname data-reactions-enabled=1 data-repo=Pawan-666/website_new_theme data-repo-id=R_kgDOL6heGA data-strict=0 data-theme=preferred_color_scheme src=https://giscus.app/client.js></script></div><footer><div class=copyright><p>© 2024 Pawan Chhetri</div><div class=credits>Powered by <a rel="noreferrer noopener" href=https://www.getzola.org target=_blank>zola</a> and <a rel="noreferrer noopener" href=https://github.com/isunjn/serene target=_blank>serene</a></div></footer></main></div><script src=/js/lightense.min.js></script><script src=/js/main.js></script>
