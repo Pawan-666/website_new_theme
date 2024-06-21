@@ -15,6 +15,10 @@
         <lastmod>2023-04-01</lastmod>
     </url>
     <url>
+        <loc>https://pawanchhetri.com.np/blog/k3s-homelab/</loc>
+        <lastmod>2024-06-20</lastmod>
+    </url>
+    <url>
         <loc>https://pawanchhetri.com.np/blog/terraform-ansible/</loc>
         <lastmod>2023-04-12</lastmod>
     </url>
@@ -59,6 +63,9 @@
         <loc>https://pawanchhetri.com.np/tags/homelab/</loc>
     </url>
     <url>
+        <loc>https://pawanchhetri.com.np/tags/k8s/</loc>
+    </url>
+    <url>
         <loc>https://pawanchhetri.com.np/tags/linux/</loc>
     </url>
     <url>
@@ -68,10 +75,7 @@
         <loc>https://pawanchhetri.com.np/tags/neovim/</loc>
     </url>
     <url>
-        <loc>https://pawanchhetri.com.np/tags/self-hosting/</loc>
-    </url>
-    <url>
-        <loc>https://pawanchhetri.com.np/tags/selfhosted/</loc>
+        <loc>https://pawanchhetri.com.np/tags/self-hosted/</loc>
     </url>
     <url>
         <loc>https://pawanchhetri.com.np/tags/terminal/</loc>

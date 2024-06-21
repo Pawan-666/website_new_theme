@@ -5,8 +5,242 @@
     <link href="https://pawanchhetri.com.np/blog/atom.xml" rel="self" type="application/atom+xml"/>
     <link href="https://pawanchhetri.com.np/blog/"/>
     <generator uri="https://www.getzola.org/">Zola</generator>
-    <updated>2024-06-03T00:00:00+00:00</updated>
+    <updated>2024-06-20T00:00:00+00:00</updated>
     <id>https://pawanchhetri.com.np/blog/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Kubernetes Homelab</title>
+        <published>2024-06-20T00:00:00+00:00</published>
+        <updated>2024-06-20T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://pawanchhetri.com.np/blog/k3s-homelab/" type="text/html"/>
+        <id>https://pawanchhetri.com.np/blog/k3s-homelab/</id>
+        
+        <content type="html">&lt;p&gt;   I’ve been using my old laptop as a home server for about a year. Initially, I relied on Docker Compose to manage different services, which works well for single or multiple users. For a single or multiple users docker-compose is definitely the best way to set up a homelab server. But I wanted to use  Kubernetes because Kubernetes is the optimal solution, especially if I want several users at once and setting Kubernetes is fun. So, I’m upgrading to Kubernetes to deploy a media server and deploy a monitoring solution too. I’m also exposing these services through domain name, making them accessible from anywhere on the internet.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;why-choose-kubernetes-over-docker-compose&quot;&gt;Why choose Kubernetes over docker-compose?&lt;a class=&quot;zola-anchor&quot; href=&quot;#why-choose-kubernetes-over-docker-compose&quot; aria-label=&quot;Anchor link for: why-choose-kubernetes-over-docker-compose&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Automatic Scaling: Kubernetes can scale up or down based on the demand. When more users access the service, Kubernetes will roll out additional pods (instances) as needed and scale back down when the demand decreases.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;High Reliability: Kubernetes ReplicaSets ensure that a specified number of pod replicas are running at any given time, thus maintaining the desired level of redundancy. With multiple replicas&#x2F;instances running, user traffic is efficiently distributed, ensuring smooth performance.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Self-Healing : Kubernetes can automatically detect and replace failing containers, rescheduling them as needed to ensure minimal disruption to your services.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Extensive Ecosystem : Kubernetes offers a vast range of plugins and tools, making it easy to integrate with other technologies and services, enhancing the functionality and efficiency of your homelab server.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;This makes Kubernetes not just a powerful tool but an essential upgrade for anyone looking to manage a homelab server effectively, especially with multiple users in mind.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;code&gt;Having a system with decent specs is recommended otherwise its a lost cause tho&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;setup-requirements&quot;&gt;Setup requirements&lt;a class=&quot;zola-anchor&quot; href=&quot;#setup-requirements&quot; aria-label=&quot;Anchor link for: setup-requirements&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;h4 id=&quot;a-linux-server-desktop&quot;&gt;A Linux Server&#x2F;Desktop&lt;a class=&quot;zola-anchor&quot; href=&quot;#a-linux-server-desktop&quot; aria-label=&quot;Anchor link for: a-linux-server-desktop&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;My system specs are 4C CPU, 6GB RAM ,1TB Disk. This is not the recommended specs to run media server but workable enough to certain extent.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;k3s-lightweight-kubernetes-easy-to-install-half-the-memory-all-in-a-binary-of-less-than-100-mb&quot;&gt;&lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;docs.k3s.io&#x2F;&quot;&gt;k3s&lt;&#x2F;a&gt; &lt;code&gt;Lightweight Kubernetes. Easy to install, half the memory, all in a binary of less than 100 MB&lt;&#x2F;code&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#k3s-lightweight-kubernetes-easy-to-install-half-the-memory-all-in-a-binary-of-less-than-100-mb&quot; aria-label=&quot;Anchor link for: k3s-lightweight-kubernetes-easy-to-install-half-the-memory-all-in-a-binary-of-less-than-100-mb&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;I’m installing k3s on my machine, which is Lightweight kubernetes. It works on the basis that your machine is master node and worker node at once but other worker nodes can be added easily.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;curl -sfL https:&#x2F;&#x2F;get.k3s.io | sh -       # Installation command 
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2024-06-20-21-02-18.png&quot; alt=&quot;&quot; &#x2F;&gt;
+K3s runs as a daemon on the server. The dotted ip will be used later to map domain names in Cloudflare tunnels.&lt;&#x2F;p&gt;
+&lt;p&gt;Best practices:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;initial kube config is present in &#x2F;etc&#x2F;rancher&#x2F;k3s&#x2F;k3s.yaml&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;mkdir ~&#x2F;.kube
+&lt;&#x2F;span&gt;&lt;span&gt;cp &#x2F;etc&#x2F;rancher&#x2F;k3s&#x2F;k3s.yaml ~&#x2F;.kube&#x2F;config
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;chmod 600 ~&#x2F;.kube&#x2F;config&amp;#39;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;ul&gt;
+&lt;li&gt;Put these commands in shell config file for persistence&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;alias k=&amp;#39;sudo k3s kubectl&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;alias kubectl=&amp;#39;sudo k3s kubectl&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;export KUBECONFIG=&#x2F;home&#x2F;pawan&#x2F;.kube&#x2F;config
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h4 id=&quot;a-domain-name&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;blog&#x2F;k3s-homelab&#x2F;pawanchhetri.com.np&quot;&gt;A domain name&lt;&#x2F;a&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#a-domain-name&quot; aria-label=&quot;Anchor link for: a-domain-name&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;Either buy a cheap one or apply for a free one. Set cloudflare nameservers.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;setting-cloudflare-tunnel&quot;&gt;&lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;developers.cloudflare.com&#x2F;cloudflare-one&#x2F;connections&#x2F;connect-networks&#x2F;get-started&#x2F;&quot;&gt;Setting cloudflare tunnel&lt;&#x2F;a&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#setting-cloudflare-tunnel&quot; aria-label=&quot;Anchor link for: setting-cloudflare-tunnel&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;This allows us to map socket(exposed port of our local machine&#x2F;ip) with a domain name.&lt;&#x2F;p&gt;
+&lt;p&gt;There are multiple ways to set this up. &lt;&#x2F;p&gt;
+&lt;p&gt;I’ve installed cloudflared using docker agent.
+&lt;img src=&quot;&#x2F;images&#x2F;2024-06-20-20-16-36.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2024-06-20-19-21-24.png&quot; alt=&quot;&quot; &#x2F;&gt;
+The tunnel status should be &lt;code&gt;HEALTHY&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;I’ll be deploying services for these two domains.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;blog&#x2F;k3s-homelab&#x2F;jellyfin.pawanchhetri.com.np&quot;&gt;jellyfin.pawanchhetri.com.np&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;blog&#x2F;k3s-homelab&#x2F;grafana.pawanchhetri.com.np&quot;&gt;grafana.pawanchhetri.com.np&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2024-06-20-19-20-15.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;kubernetes-deployment&quot;&gt;Kubernetes deployment&lt;a class=&quot;zola-anchor&quot; href=&quot;#kubernetes-deployment&quot; aria-label=&quot;Anchor link for: kubernetes-deployment&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;I’m setting up &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;jellyfin.org&#x2F;&quot;&gt;jellyfin&lt;&#x2F;a&gt; (The Free Software Media System) to host my downloaded movies, tv_shows, music, books, audioBooks, podcasts, images.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;k8s-manifest&quot;&gt;k8s manifest&lt;a class=&quot;zola-anchor&quot; href=&quot;#k8s-manifest&quot; aria-label=&quot;Anchor link for: k8s-manifest&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;Using a single manifest file for namespace, deployment, hpa, service for ease of deployment.&lt;&#x2F;p&gt;
+&lt;p&gt;❯ cat jellyfin.yml&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;yaml&quot; style=&quot;background-color:#2e3440;color:#d8dee9;&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;#Creating a jellyfin namespace 
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;v1
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;kind&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Namespace
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;#Creating a Deployment with resource allocation
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;apps&#x2F;v1
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;kind&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Deployment
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;namespace&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;labels&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;app&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;spec&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;replicas&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;1      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# I&amp;#39;m the only user using it
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;selector&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;matchLabels&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;app&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;template&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;labels&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;app&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;spec&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;containers&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin&#x2F;jellyfin
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;containerPort&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;8096
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;resources&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;requests&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;memory&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;512Mi&amp;quot;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# Requesting 512Mi of RAM
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;cpu&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;500m&amp;quot;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# Requesting 0.5 CPU core
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;limits&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;memory&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;1Gi&amp;quot;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# Limiting to 1Gi of RAM
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;cpu&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;1000m&amp;quot;     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# Limiting to 1 CPU cores
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;volumeMounts&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;config-volume
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;mountPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;config
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;cache-volume
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;mountPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;cache
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;media1
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;mountPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;media1
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;media2
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;mountPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;media2
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;media3
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;mountPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;media3
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;media4
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;mountPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;media4
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;media5
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;mountPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;media5
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;media6
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;mountPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;media6
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;volumes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;config-volume
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;hostPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;path&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;home&#x2F;pawan&#x2F;k8s_homelab&#x2F;jellyfin&#x2F;scratch&#x2F;config
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;cache-volume
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;hostPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;path&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;home&#x2F;pawan&#x2F;k8s_homelab&#x2F;jellyfin&#x2F;scratch&#x2F;cache
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;media1
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;hostPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;path&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;home&#x2F;pawan&#x2F;Storage&#x2F;Movies&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;media2
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;hostPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;path&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;home&#x2F;pawan&#x2F;Storage&#x2F;tv_shows&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;media3
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;hostPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;path&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;home&#x2F;pawan&#x2F;Storage&#x2F;Books&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;media4
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;hostPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;path&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;home&#x2F;pawan&#x2F;Storage&#x2F;music&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;media5
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;hostPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;path&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;home&#x2F;pawan&#x2F;Storage&#x2F;AudioBooks&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;media6
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;hostPath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;path&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;home&#x2F;pawan&#x2F;Storage&#x2F;podcast&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# autoscaling pods when load increases&#x2F;decreases
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# omit this part if you are a single user and don&amp;#39;t have much resource on your system
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;autoscaling&#x2F;v2
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;kind&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;HorizontalPodAutoscaler
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin-hpa
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;namespace&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;spec&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;scaleTargetRef&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;apps&#x2F;v1
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;kind&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Deployment
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;minReplicas&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;1
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;maxReplicas&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;3
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;metrics&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;type&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Resource
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;resource&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;cpu
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;target&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;type&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Utilization
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;averageUtilization&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;50  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# Target average CPU utilization percentage
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# Exposing jellyfin through my local_ip:30096
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;apiVersion&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;v1
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;kind&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Service
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;namespace&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;labels&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;app&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;spec&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;type&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;NodePort
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;port&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;8096
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;targetPort&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;8096
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;nodePort&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;30096  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# This is optional; Kubernetes will automatically assign a port if you omit this line
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;protocol&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;TCP
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;selector&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;app&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h4 id=&quot;k-apply-f-jellyfin-yml&quot;&gt;❯ k apply -f jellyfin.yml&lt;a class=&quot;zola-anchor&quot; href=&quot;#k-apply-f-jellyfin-yml&quot; aria-label=&quot;Anchor link for: k-apply-f-jellyfin-yml&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2024-06-21-12-35-43.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Since we have mapped the ip:port to the domain, hitting the domain name will open up the jellyfin signup&#x2F;login page. GUI configuration is straightforward.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2024-06-20-20-33-40.png&quot; alt=&quot;&quot; &#x2F;&gt;
+                                       jellyfin UI&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;grafana-prometheus-helm&quot;&gt;&lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;artifacthub.io&#x2F;packages&#x2F;helm&#x2F;prometheus-community&#x2F;kube-prometheus-stack&quot;&gt;grafana-prometheus helm&lt;&#x2F;a&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#grafana-prometheus-helm&quot; aria-label=&quot;Anchor link for: grafana-prometheus-helm&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;Grafana-prometheus is still the most lightweight monitoring solution using kubernetes to monitor k8s resources.&lt;&#x2F;p&gt;
+&lt;p&gt;I’m using &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;helm.sh&#x2F;docs&#x2F;intro&#x2F;install&#x2F;&quot;&gt;helm&lt;&#x2F;a&gt; to deploy this stack since it is the most straightforward way to install grafana-prometheus on kubernetes. I’m deploying this on default namespace.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2e3440;color:#d8dee9;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#88c0d0;&quot;&gt;helm&lt;&#x2F;span&gt;&lt;span&gt; repo add prometheus-community https:&#x2F;&#x2F;prometheus-community.github.io&#x2F;helm-charts
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#88c0d0;&quot;&gt;helm&lt;&#x2F;span&gt;&lt;span&gt; repo update
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# helm install [RELEASE_NAME] prometheus-community&#x2F;kube-prometheus-stack
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#88c0d0;&quot;&gt;helm&lt;&#x2F;span&gt;&lt;span&gt; install my-promethues-grafana  prometheus-community&#x2F;kube-prometheus-stack
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# helm upgrade [RELEASE_NAME] prometheus-community&#x2F;kube-prometheus-stack
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;#changing default values if needed
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#88c0d0;&quot;&gt;helm&lt;&#x2F;span&gt;&lt;span&gt; show values prometheus-community&#x2F;kube-prometheus-stack &lt;&#x2F;span&gt;&lt;span style=&quot;color:#81a1c1;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span&gt; values.yaml
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#88c0d0;&quot;&gt;helm&lt;&#x2F;span&gt;&lt;span&gt; upgrade my-promethues-grafana prometheus-community&#x2F;kube-prometheus-stack -f values.yaml  
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# helm uninstall [RELEASE_NAME]
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Change the grafana svc to NodePort to access it from outside and also to map to domain name. Setting NodePort svc for prometheus is optional since all the targets are up by default and the integration as data sources is also done automatically.
+&lt;img src=&quot;&#x2F;images&#x2F;2024-06-20-20-12-14.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;A lot of default dashboard are loaded by default. We can create dashboards manually or grab an Id from &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;grafana.com&#x2F;grafana&#x2F;dashboards&#x2F;&quot;&gt;grafana_dashboards&lt;&#x2F;a&gt; of your choice and import it. &lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2024-06-20-19-31-50.png&quot; alt=&quot;&quot; &#x2F;&gt;
+Host monitoring - Node Exporter Full(ID 1860)&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2024-06-21-13-06-25.png&quot; alt=&quot;&quot; &#x2F;&gt;
+K8s resource monitoring - kube-state-metrics-v2(ID 13332)&lt;&#x2F;p&gt;
+&lt;p&gt;So any service that can be deployed with docker&#x2F;docker-compose can be converted into kubernetes either by deploying manifest files or helm charts. How much complexity you want is your choice!&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
     <entry xml:lang="en">
         <title>Vim cheatsheet</title>
         <published>2024-06-03T00:00:00+00:00</published>
@@ -392,71 +626,71 @@
 &lt;h4 id=&quot;homepage&quot;&gt;&lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;homepage.pawanchhetri.com.np&quot;&gt;Homepage&lt;&#x2F;a&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#homepage&quot; aria-label=&quot;Anchor link for: homepage&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
 &lt;p&gt;Homelab bookmarks tab, access all the self hosted services and more from this page. Allows fancy graphics and stuff too but I’ve gone only text based with minimal bookmarks.yml file configuration.&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2023-10-07-08-07-50.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;version: &amp;quot;3.3&amp;quot;
-&lt;&#x2F;span&gt;&lt;span&gt;services:
-&lt;&#x2F;span&gt;&lt;span&gt;  homepage:
-&lt;&#x2F;span&gt;&lt;span&gt;    image: ghcr.io&#x2F;benphelps&#x2F;homepage:latest
-&lt;&#x2F;span&gt;&lt;span&gt;    container_name: homepage
-&lt;&#x2F;span&gt;&lt;span&gt;    ports:
-&lt;&#x2F;span&gt;&lt;span&gt;      - 8921:3000
-&lt;&#x2F;span&gt;&lt;span&gt;    volumes:
-&lt;&#x2F;span&gt;&lt;span&gt;      - .&#x2F;config:&#x2F;app&#x2F;config # Make sure your local config directory exists
-&lt;&#x2F;span&gt;&lt;span&gt;      - &#x2F;var&#x2F;run&#x2F;docker.sock:&#x2F;var&#x2F;run&#x2F;docker.sock:ro # (optional) For docker integrations
-&lt;&#x2F;span&gt;&lt;span&gt;    restart: unless-stopped
+&lt;pre data-lang=&quot;yaml&quot; style=&quot;background-color:#2e3440;color:#d8dee9;&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;version&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;3.3&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;services&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;homepage&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;ghcr.io&#x2F;benphelps&#x2F;homepage:latest
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;container_name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;homepage
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;8921:3000
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;volumes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;.&#x2F;config:&#x2F;app&#x2F;config &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# Make sure your local config directory exists
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;var&#x2F;run&#x2F;docker.sock:&#x2F;var&#x2F;run&#x2F;docker.sock:ro &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# (optional) For docker integrations
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;restart&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;unless-stopped
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;&lt;code&gt;$ cat bookmarks.yaml&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;---
+&lt;pre data-lang=&quot;yaml&quot; style=&quot;background-color:#2e3440;color:#d8dee9;&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span&gt;---
 &lt;&#x2F;span&gt;&lt;span&gt;
-&lt;&#x2F;span&gt;&lt;span&gt;- Monitoring:
-&lt;&#x2F;span&gt;&lt;span&gt;    - Portainer:
-&lt;&#x2F;span&gt;&lt;span&gt;        - abbr: Pr
-&lt;&#x2F;span&gt;&lt;span&gt;          href: https:&#x2F;&#x2F;portainer.pawanchhetri.com.np&#x2F;
-&lt;&#x2F;span&gt;&lt;span&gt;    - Grafana:
-&lt;&#x2F;span&gt;&lt;span&gt;        - abbr: gf
-&lt;&#x2F;span&gt;&lt;span&gt;          href: https:&#x2F;&#x2F;grafana.pawanchhetri.com.np&#x2F;
-&lt;&#x2F;span&gt;&lt;span&gt;    - Uptime-kuma:
-&lt;&#x2F;span&gt;&lt;span&gt;        - abbr: Up
-&lt;&#x2F;span&gt;&lt;span&gt;          href: https:&#x2F;&#x2F;uptimekuma.pawanchhetri.com.np&#x2F;
-&lt;&#x2F;span&gt;&lt;span&gt;    - SSH:
-&lt;&#x2F;span&gt;&lt;span&gt;       - abbr: sh
-&lt;&#x2F;span&gt;&lt;span&gt;         href: https:&#x2F;&#x2F;ssh.pawanchhetri.com.np&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;Monitoring&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;Portainer&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;abbr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Pr
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;https:&#x2F;&#x2F;portainer.pawanchhetri.com.np&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;    - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;Grafana&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;abbr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;gf
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;https:&#x2F;&#x2F;grafana.pawanchhetri.com.np&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;    - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;Uptime-kuma&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;abbr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Up
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;https:&#x2F;&#x2F;uptimekuma.pawanchhetri.com.np&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;    - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;SSH&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;       - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;abbr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;sh
+&lt;&#x2F;span&gt;&lt;span&gt;         &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;https:&#x2F;&#x2F;ssh.pawanchhetri.com.np&#x2F;
 &lt;&#x2F;span&gt;&lt;span&gt;
-&lt;&#x2F;span&gt;&lt;span&gt;- Media:
-&lt;&#x2F;span&gt;&lt;span&gt;   - Music:
-&lt;&#x2F;span&gt;&lt;span&gt;       - abbr: Mu
-&lt;&#x2F;span&gt;&lt;span&gt;         href: https:&#x2F;&#x2F;music.pawanchhetri.com.np
-&lt;&#x2F;span&gt;&lt;span&gt;   - Jellyfin:
-&lt;&#x2F;span&gt;&lt;span&gt;       - abbr: Jf
-&lt;&#x2F;span&gt;&lt;span&gt;         href: https:&#x2F;&#x2F;jellyfin.pawanchhetri.com.np
-&lt;&#x2F;span&gt;&lt;span&gt;   - Audiobook:
-&lt;&#x2F;span&gt;&lt;span&gt;       - abbr: AS
-&lt;&#x2F;span&gt;&lt;span&gt;         href: https:&#x2F;&#x2F;audiobook.pawanchhetri.com.np
+&lt;&#x2F;span&gt;&lt;span&gt;- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;Media&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;   - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;Music&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;       - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;abbr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Mu
+&lt;&#x2F;span&gt;&lt;span&gt;         &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;https:&#x2F;&#x2F;music.pawanchhetri.com.np
+&lt;&#x2F;span&gt;&lt;span&gt;   - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;Jellyfin&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;       - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;abbr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Jf
+&lt;&#x2F;span&gt;&lt;span&gt;         &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;https:&#x2F;&#x2F;jellyfin.pawanchhetri.com.np
+&lt;&#x2F;span&gt;&lt;span&gt;   - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;Audiobook&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;       - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;abbr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;AS
+&lt;&#x2F;span&gt;&lt;span&gt;         &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;https:&#x2F;&#x2F;audiobook.pawanchhetri.com.np
 &lt;&#x2F;span&gt;&lt;span&gt;
-&lt;&#x2F;span&gt;&lt;span&gt;- Reading:
-&lt;&#x2F;span&gt;&lt;span&gt;    - Blog:
-&lt;&#x2F;span&gt;&lt;span&gt;       - abbr: Bl
-&lt;&#x2F;span&gt;&lt;span&gt;         href: https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;
-&lt;&#x2F;span&gt;&lt;span&gt;    - Books:
-&lt;&#x2F;span&gt;&lt;span&gt;        - abbr: KV
-&lt;&#x2F;span&gt;&lt;span&gt;          href: https:&#x2F;&#x2F;books.pawanchhetri.com.np
+&lt;&#x2F;span&gt;&lt;span&gt;- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;Reading&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;Blog&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;       - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;abbr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Bl
+&lt;&#x2F;span&gt;&lt;span&gt;         &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;    - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;Books&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;abbr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;KV
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;https:&#x2F;&#x2F;books.pawanchhetri.com.np
 &lt;&#x2F;span&gt;&lt;span&gt;
-&lt;&#x2F;span&gt;&lt;span&gt;- Social:
-&lt;&#x2F;span&gt;&lt;span&gt;    - Reddit:
-&lt;&#x2F;span&gt;&lt;span&gt;        - abbr: RE
-&lt;&#x2F;span&gt;&lt;span&gt;          href: https:&#x2F;&#x2F;reddit.com&#x2F;
-&lt;&#x2F;span&gt;&lt;span&gt;    - YouTube:
-&lt;&#x2F;span&gt;&lt;span&gt;        - abbr: YT
-&lt;&#x2F;span&gt;&lt;span&gt;          href: https:&#x2F;&#x2F;youtube.com&#x2F;
-&lt;&#x2F;span&gt;&lt;span&gt;    - LinkendIn:
-&lt;&#x2F;span&gt;&lt;span&gt;        - abbr: LN
-&lt;&#x2F;span&gt;&lt;span&gt;          href: https:&#x2F;&#x2F;www.linkedin.com&#x2F;
-&lt;&#x2F;span&gt;&lt;span&gt;    - Github:
-&lt;&#x2F;span&gt;&lt;span&gt;        - abbr: GH
-&lt;&#x2F;span&gt;&lt;span&gt;          href: https:&#x2F;&#x2F;github.com&#x2F;Pawan-666&#x2F;
-&lt;&#x2F;span&gt;&lt;span&gt;    - Feedly:
-&lt;&#x2F;span&gt;&lt;span&gt;        - abbr: rss
-&lt;&#x2F;span&gt;&lt;span&gt;          href: https:&#x2F;&#x2F;feedly.com&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;Social&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;Reddit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;abbr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;RE
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;https:&#x2F;&#x2F;reddit.com&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;    - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;YouTube&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;abbr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;YT
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;https:&#x2F;&#x2F;youtube.com&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;    - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;LinkendIn&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;abbr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;LN
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;https:&#x2F;&#x2F;www.linkedin.com&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;    - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;Github&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;abbr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;GH
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;Pawan-666&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;    - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;Feedly&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;abbr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;rss
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;https:&#x2F;&#x2F;feedly.com&#x2F;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;br &#x2F;&gt;
 &lt;br &#x2F;&gt;
@@ -464,84 +698,84 @@
 &lt;p&gt;For server and docker containers monitoring I’ve used Grafana. Helps to monitor the server CPU,Memory,Network status.
 &lt;img src=&quot;&#x2F;images&#x2F;2023-10-07-09-13-33.png&quot; alt=&quot;&quot; &#x2F;&gt;
 &lt;img src=&quot;&#x2F;images&#x2F;2023-10-07-09-12-52.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;version: &amp;#39;3.3&amp;#39;
-&lt;&#x2F;span&gt;&lt;span&gt;services:
-&lt;&#x2F;span&gt;&lt;span&gt;``    node-exporter:
-&lt;&#x2F;span&gt;&lt;span&gt;      # ports localhost:9100&#x2F;metrics
-&lt;&#x2F;span&gt;&lt;span&gt;        network_mode: host
-&lt;&#x2F;span&gt;&lt;span&gt;        pid: host
-&lt;&#x2F;span&gt;&lt;span&gt;        volumes:
-&lt;&#x2F;span&gt;&lt;span&gt;            - &amp;#39;&#x2F;:&#x2F;host:ro,rslave&amp;#39;
-&lt;&#x2F;span&gt;&lt;span&gt;        image: &amp;#39;quay.io&#x2F;prometheus&#x2F;node-exporter:latest&amp;#39;
+&lt;pre data-lang=&quot;yaml&quot; style=&quot;background-color:#2e3440;color:#d8dee9;&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;version&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;3.3&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;services&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;``    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;node-exporter&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# ports localhost:9100&#x2F;metrics
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;network_mode&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;host
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;pid&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;host
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;volumes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;            - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;&#x2F;:&#x2F;host:ro,rslave&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;quay.io&#x2F;prometheus&#x2F;node-exporter:latest&amp;#39;
 &lt;&#x2F;span&gt;&lt;span&gt;
-&lt;&#x2F;span&gt;&lt;span&gt;    prometheus:
-&lt;&#x2F;span&gt;&lt;span&gt;        container_name: prometheus
-&lt;&#x2F;span&gt;&lt;span&gt;        ports:
-&lt;&#x2F;span&gt;&lt;span&gt;            - &amp;#39;9091:9090&amp;#39; #modify 9091 to your setup needs
-&lt;&#x2F;span&gt;&lt;span&gt;        volumes:
-&lt;&#x2F;span&gt;&lt;span&gt;            - &amp;#39;.&#x2F;Configs&#x2F;Prometheus&#x2F;prometheus.yml:&#x2F;etc&#x2F;prometheus&#x2F;prometheus.yml&amp;#39; #modify the path for your install location
-&lt;&#x2F;span&gt;&lt;span&gt;        image: prom&#x2F;prometheus
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;prometheus&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;container_name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;prometheus
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;            - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;9091:9090&amp;#39; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;#modify 9091 to your setup needs
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;volumes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;            - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;.&#x2F;Configs&#x2F;Prometheus&#x2F;prometheus.yml:&#x2F;etc&#x2F;prometheus&#x2F;prometheus.yml&amp;#39; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;#modify the path for your install location
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;prom&#x2F;prometheus
 &lt;&#x2F;span&gt;&lt;span&gt;
-&lt;&#x2F;span&gt;&lt;span&gt;    cadvisor:
-&lt;&#x2F;span&gt;&lt;span&gt;      image: gcr.io&#x2F;cadvisor&#x2F;cadvisor
-&lt;&#x2F;span&gt;&lt;span&gt;      container_name: cadvisor
-&lt;&#x2F;span&gt;&lt;span&gt;      ports:
-&lt;&#x2F;span&gt;&lt;span&gt;        - 8080:8080
-&lt;&#x2F;span&gt;&lt;span&gt;      volumes:
-&lt;&#x2F;span&gt;&lt;span&gt;        - &#x2F;:&#x2F;rootfs:ro
-&lt;&#x2F;span&gt;&lt;span&gt;        - &#x2F;var&#x2F;run:&#x2F;var&#x2F;run:rw
-&lt;&#x2F;span&gt;&lt;span&gt;        - &#x2F;sys:&#x2F;sys:ro
-&lt;&#x2F;span&gt;&lt;span&gt;        - &#x2F;var&#x2F;lib&#x2F;docker:&#x2F;var&#x2F;lib&#x2F;docker:ro
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;cadvisor&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;gcr.io&#x2F;cadvisor&#x2F;cadvisor
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;container_name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;cadvisor
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;8080:8080
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;volumes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;:&#x2F;rootfs:ro
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;var&#x2F;run:&#x2F;var&#x2F;run:rw
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;sys:&#x2F;sys:ro
+&lt;&#x2F;span&gt;&lt;span&gt;        - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;var&#x2F;lib&#x2F;docker:&#x2F;var&#x2F;lib&#x2F;docker:ro
 &lt;&#x2F;span&gt;&lt;span&gt;
-&lt;&#x2F;span&gt;&lt;span&gt;    grafana:            # admin&#x2F;admin default username&#x2F;password
-&lt;&#x2F;span&gt;&lt;span&gt;        container_name: grafana
-&lt;&#x2F;span&gt;&lt;span&gt;        ports:
-&lt;&#x2F;span&gt;&lt;span&gt;            - &amp;#39;3457:3000&amp;#39; #modify 3457 to your setup needs
-&lt;&#x2F;span&gt;&lt;span&gt;        image: grafana&#x2F;grafana
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;grafana&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# admin&#x2F;admin default username&#x2F;password
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;container_name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;grafana
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;            - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;3457:3000&amp;#39; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;#modify 3457 to your setup needs
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;grafana&#x2F;grafana
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;&lt;code&gt;$ cat prometheus.yml&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;global:
-&lt;&#x2F;span&gt;&lt;span&gt;  scrape_interval: 5s
-&lt;&#x2F;span&gt;&lt;span&gt;  external_labels:
-&lt;&#x2F;span&gt;&lt;span&gt;    monitor: &amp;#39;node&amp;#39;
-&lt;&#x2F;span&gt;&lt;span&gt;scrape_configs:
-&lt;&#x2F;span&gt;&lt;span&gt;  - job_name: &amp;#39;prometheus&amp;#39;
-&lt;&#x2F;span&gt;&lt;span&gt;    static_configs:
-&lt;&#x2F;span&gt;&lt;span&gt;      - targets: [&amp;#39;192.168.1.68:9090&amp;#39;] ## IP Address of the localhost. Match the port to your container port
-&lt;&#x2F;span&gt;&lt;span&gt;  - job_name: &amp;#39;node-exporter&amp;#39;
-&lt;&#x2F;span&gt;&lt;span&gt;    static_configs:
-&lt;&#x2F;span&gt;&lt;span&gt;      - targets: [&amp;#39;192.168.1.68:9100&amp;#39;] ## IP Address of the localhost
+&lt;pre data-lang=&quot;yaml&quot; style=&quot;background-color:#2e3440;color:#d8dee9;&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;global&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;scrape_interval&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;5s
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;external_labels&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;monitor&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;node&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;scrape_configs&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;job_name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;prometheus&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;static_configs&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;targets&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;192.168.1.68:9090&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;## IP Address of the localhost. Match the port to your container port
+&lt;&#x2F;span&gt;&lt;span&gt;  - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;job_name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;node-exporter&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;static_configs&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;targets&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;192.168.1.68:9100&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;## IP Address of the localhost
 &lt;&#x2F;span&gt;&lt;span&gt;
-&lt;&#x2F;span&gt;&lt;span&gt;  - job_name: &amp;#39;docker-metrics&amp;#39;
-&lt;&#x2F;span&gt;&lt;span&gt;    scrape_interval: 5s
-&lt;&#x2F;span&gt;&lt;span&gt;    static_configs:
-&lt;&#x2F;span&gt;&lt;span&gt;      - targets: [&amp;#39;192.168.1.68:9323&amp;#39;]
+&lt;&#x2F;span&gt;&lt;span&gt;  - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;job_name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;docker-metrics&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;scrape_interval&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;5s
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;static_configs&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;targets&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;192.168.1.68:9323&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;]
 &lt;&#x2F;span&gt;&lt;span&gt;
-&lt;&#x2F;span&gt;&lt;span&gt;  - job_name: &amp;#39;cAvisor&amp;#39;
-&lt;&#x2F;span&gt;&lt;span&gt;    static_configs:
-&lt;&#x2F;span&gt;&lt;span&gt;      - targets: [&amp;#39;192.168.1.68:8080&amp;#39;]
+&lt;&#x2F;span&gt;&lt;span&gt;  - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;job_name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;cAvisor&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;static_configs&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;targets&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;192.168.1.68:8080&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;]
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;br &#x2F;&gt;
 &lt;br &#x2F;&gt;
 &lt;h4 id=&quot;portainer&quot;&gt;&lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;portainer.pawanchhetri.com.np&quot;&gt;Portainer&lt;&#x2F;a&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#portainer&quot; aria-label=&quot;Anchor link for: portainer&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
 &lt;p&gt;I prefer and use terminal to deploy containers but portainer does provide nice gui to deploy docker stuffs with nice visualizations, bells and whistles.
 &lt;img src=&quot;&#x2F;images&#x2F;2023-10-07-08-17-59.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;version: &amp;quot;3.7&amp;quot;
+&lt;pre data-lang=&quot;yaml&quot; style=&quot;background-color:#2e3440;color:#d8dee9;&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;version&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;3.7&amp;quot;
 &lt;&#x2F;span&gt;&lt;span&gt;
-&lt;&#x2F;span&gt;&lt;span&gt;services:
-&lt;&#x2F;span&gt;&lt;span&gt;  portainer:
-&lt;&#x2F;span&gt;&lt;span&gt;    image: portainer&#x2F;portainer-ce:2.11.0-alpine # Replace 2.11.0 with the latest version.
-&lt;&#x2F;span&gt;&lt;span&gt;    command: -H unix:&#x2F;&#x2F;&#x2F;var&#x2F;run&#x2F;docker.sock
-&lt;&#x2F;span&gt;&lt;span&gt;    restart: always
-&lt;&#x2F;span&gt;&lt;span&gt;    volumes:
-&lt;&#x2F;span&gt;&lt;span&gt;      - &#x2F;var&#x2F;run&#x2F;docker.sock:&#x2F;var&#x2F;run&#x2F;docker.sock
-&lt;&#x2F;span&gt;&lt;span&gt;      - &#x2F;volume1&#x2F;docker&#x2F;config&#x2F;Portainer:&#x2F;data
-&lt;&#x2F;span&gt;&lt;span&gt;    ports:
-&lt;&#x2F;span&gt;&lt;span&gt;      - 9443:9443
-&lt;&#x2F;span&gt;&lt;span&gt;    healthcheck:
-&lt;&#x2F;span&gt;&lt;span&gt;      test: [&amp;#39;CMD&amp;#39;, &amp;#39;wget&amp;#39;, &amp;#39;--spider&amp;#39;, &amp;#39;localhost:9000&amp;#39;]
-&lt;&#x2F;span&gt;&lt;span&gt;      interval: 15s # Amount of time after it starts checking for readiness
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;services&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;portainer&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;portainer&#x2F;portainer-ce:2.11.0-alpine &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# Replace 2.11.0 with the latest version.
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;command&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;-H unix:&#x2F;&#x2F;&#x2F;var&#x2F;run&#x2F;docker.sock
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;restart&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;always
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;volumes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;var&#x2F;run&#x2F;docker.sock:&#x2F;var&#x2F;run&#x2F;docker.sock
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;volume1&#x2F;docker&#x2F;config&#x2F;Portainer:&#x2F;data
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;9443:9443
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;healthcheck&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;test&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;CMD&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;wget&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;--spider&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;localhost:9000&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;]
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;interval&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;15s &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# Amount of time after it starts checking for readiness
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;br &#x2F;&gt;
@@ -549,16 +783,16 @@
 &lt;h4 id=&quot;uptime-kuma&quot;&gt;&lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;uptimekuma.pawanchhetri.com.np&quot;&gt;Uptime-kuma&lt;&#x2F;a&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#uptime-kuma&quot; aria-label=&quot;Anchor link for: uptime-kuma&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
 &lt;p&gt;Fantastic to monitor websites(up or not), latency and ssl cert expiry date, You can even share the status page with clients.&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2023-10-07-08-20-54.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;version: &amp;#39;3&amp;#39;
-&lt;&#x2F;span&gt;&lt;span&gt;services:
-&lt;&#x2F;span&gt;&lt;span&gt;  uptime-kuma:
-&lt;&#x2F;span&gt;&lt;span&gt;    image: louislam&#x2F;uptime-kuma:1.23.2
-&lt;&#x2F;span&gt;&lt;span&gt;    container_name: uptime-kuma
-&lt;&#x2F;span&gt;&lt;span&gt;    restart: always
-&lt;&#x2F;span&gt;&lt;span&gt;    ports:
-&lt;&#x2F;span&gt;&lt;span&gt;      - &amp;quot;3001:3001&amp;quot;
-&lt;&#x2F;span&gt;&lt;span&gt;    volumes:
-&lt;&#x2F;span&gt;&lt;span&gt;      - .&#x2F;data:&#x2F;app&#x2F;data
+&lt;pre data-lang=&quot;yaml&quot; style=&quot;background-color:#2e3440;color:#d8dee9;&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;version&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;3&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;services&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;uptime-kuma&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;louislam&#x2F;uptime-kuma:1.23.2
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;container_name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;uptime-kuma
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;restart&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;always
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;3001:3001&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;volumes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;.&#x2F;data:&#x2F;app&#x2F;data
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;br &#x2F;&gt;
 &lt;br &#x2F;&gt;
@@ -566,67 +800,67 @@
 &lt;p&gt;Your netflix at home. Also has plugin for subtitle download.&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2023-10-07-08-24-30.png&quot; alt=&quot;&quot; &#x2F;&gt;
 &lt;img src=&quot;&#x2F;images&#x2F;2023-10-07-08-27-57.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;version: &amp;#39;3.3&amp;#39;
-&lt;&#x2F;span&gt;&lt;span&gt;services:
-&lt;&#x2F;span&gt;&lt;span&gt;    jellyfin:
-&lt;&#x2F;span&gt;&lt;span&gt;        volumes:
-&lt;&#x2F;span&gt;&lt;span&gt;            - &amp;#39;.&#x2F;config:&#x2F;config&amp;#39;
-&lt;&#x2F;span&gt;&lt;span&gt;            - &amp;#39;.&#x2F;cache:&#x2F;cache&amp;#39;
-&lt;&#x2F;span&gt;&lt;span&gt;            - &amp;#39;&#x2F;home&#x2F;pawan&#x2F;Storage&#x2F;movies&#x2F;:&#x2F;media&amp;#39;
-&lt;&#x2F;span&gt;&lt;span&gt;        ports:
-&lt;&#x2F;span&gt;&lt;span&gt;            - &amp;#39;8096:8096&amp;#39;
-&lt;&#x2F;span&gt;&lt;span&gt;        container_name: jellyfin
-&lt;&#x2F;span&gt;&lt;span&gt;        restart: unless-stopped
-&lt;&#x2F;span&gt;&lt;span&gt;        image: jellyfin&#x2F;jellyfin
+&lt;pre data-lang=&quot;yaml&quot; style=&quot;background-color:#2e3440;color:#d8dee9;&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;version&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;3.3&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;services&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;jellyfin&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;volumes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;            - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;.&#x2F;config:&#x2F;config&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;            - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;.&#x2F;cache:&#x2F;cache&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;            - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;&#x2F;home&#x2F;pawan&#x2F;Storage&#x2F;movies&#x2F;:&#x2F;media&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;            - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;8096:8096&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;container_name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;restart&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;unless-stopped
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;jellyfin&#x2F;jellyfin
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;br &#x2F;&gt;
 &lt;br &#x2F;&gt;
 &lt;h4 id=&quot;qbittorrent&quot;&gt;&lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;qbittorrent.pawanchhetri.com.np&#x2F;&quot;&gt;Qbittorrent&lt;&#x2F;a&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#qbittorrent&quot; aria-label=&quot;Anchor link for: qbittorrent&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
 &lt;p&gt;This is a basic requirement to add movies and series to your jellyfin server. I don’t use it and don’t recommend it either !.&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2023-10-07-09-17-25.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;---
-&lt;&#x2F;span&gt;&lt;span&gt;version: &amp;quot;2.1&amp;quot;
-&lt;&#x2F;span&gt;&lt;span&gt;services:
-&lt;&#x2F;span&gt;&lt;span&gt;  qbittorrent:
-&lt;&#x2F;span&gt;&lt;span&gt;    image: lscr.io&#x2F;linuxserver&#x2F;qbittorrent:latest
-&lt;&#x2F;span&gt;&lt;span&gt;    container_name: qbittorrent
-&lt;&#x2F;span&gt;&lt;span&gt;    environment:
-&lt;&#x2F;span&gt;&lt;span&gt;      - PUID=1000
-&lt;&#x2F;span&gt;&lt;span&gt;      - PGID=1000
-&lt;&#x2F;span&gt;&lt;span&gt;      - TZ=Etc&#x2F;UTC
-&lt;&#x2F;span&gt;&lt;span&gt;      - WEBUI_PORT=8081
-&lt;&#x2F;span&gt;&lt;span&gt;    volumes:
-&lt;&#x2F;span&gt;&lt;span&gt;      - .&#x2F;config:&#x2F;config
-&lt;&#x2F;span&gt;&lt;span&gt;      - &#x2F;home&#x2F;pawan&#x2F;Storage&#x2F;movies&#x2F;torrent:&#x2F;downloads
+&lt;pre data-lang=&quot;yaml&quot; style=&quot;background-color:#2e3440;color:#d8dee9;&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;version&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;2.1&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;services&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;qbittorrent&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;lscr.io&#x2F;linuxserver&#x2F;qbittorrent:latest
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;container_name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;qbittorrent
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;environment&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;PUID=1000
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;PGID=1000
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;TZ=Etc&#x2F;UTC
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;WEBUI_PORT=8081
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;volumes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;.&#x2F;config:&#x2F;config
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;home&#x2F;pawan&#x2F;Storage&#x2F;movies&#x2F;torrent:&#x2F;downloads
 &lt;&#x2F;span&gt;&lt;span&gt;
-&lt;&#x2F;span&gt;&lt;span&gt;    ports:
-&lt;&#x2F;span&gt;&lt;span&gt;      - 8081:8081
-&lt;&#x2F;span&gt;&lt;span&gt;      - 6881:6881
-&lt;&#x2F;span&gt;&lt;span&gt;      - 6881:6881&#x2F;udp
-&lt;&#x2F;span&gt;&lt;span&gt;    restart: unless-stopped
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;8081:8081
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;6881:6881
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;6881:6881&#x2F;udp
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;restart&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;unless-stopped
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;br &#x2F;&gt;
 &lt;br &#x2F;&gt;
 &lt;h4 id=&quot;navidrome&quot;&gt;&lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;music.pawanchhetri.com.np&quot;&gt;Navidrome&lt;&#x2F;a&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#navidrome&quot; aria-label=&quot;Anchor link for: navidrome&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
 &lt;p&gt;Nice music player, especially great for those who prefer listening music with full albums like I do. It has android clients too.&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2023-10-07-08-29-53.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;version: &amp;quot;3&amp;quot;
-&lt;&#x2F;span&gt;&lt;span&gt;services:
-&lt;&#x2F;span&gt;&lt;span&gt;  navidrome:
-&lt;&#x2F;span&gt;&lt;span&gt;    image: deluan&#x2F;navidrome:latest
-&lt;&#x2F;span&gt;&lt;span&gt;    # user: 1000:1000 # should be owner of volumes
-&lt;&#x2F;span&gt;&lt;span&gt;    ports:
-&lt;&#x2F;span&gt;&lt;span&gt;      - &amp;quot;4533:4533&amp;quot;
-&lt;&#x2F;span&gt;&lt;span&gt;    restart: unless-stopped
-&lt;&#x2F;span&gt;&lt;span&gt;    environment:
-&lt;&#x2F;span&gt;&lt;span&gt;      # Optional: put your config options customization here. Examples:
-&lt;&#x2F;span&gt;&lt;span&gt;      ND_SCANSCHEDULE: 1h
-&lt;&#x2F;span&gt;&lt;span&gt;      ND_LOGLEVEL: info  
-&lt;&#x2F;span&gt;&lt;span&gt;      ND_SESSIONTIMEOUT: 24h
-&lt;&#x2F;span&gt;&lt;span&gt;      ND_BASEURL: &amp;quot;&amp;quot;
-&lt;&#x2F;span&gt;&lt;span&gt;    volumes:
-&lt;&#x2F;span&gt;&lt;span&gt;      - &amp;quot;.&#x2F;data:&#x2F;data&amp;quot;
-&lt;&#x2F;span&gt;&lt;span&gt;      - &amp;quot;&#x2F;home&#x2F;pawan&#x2F;Music&#x2F;:&#x2F;music:ro&amp;quot;
+&lt;pre data-lang=&quot;yaml&quot; style=&quot;background-color:#2e3440;color:#d8dee9;&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;version&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;3&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;services&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;navidrome&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;deluan&#x2F;navidrome:latest
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# user: 1000:1000 # should be owner of volumes
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;4533:4533&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;restart&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;unless-stopped
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;environment&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#616e88;&quot;&gt;# Optional: put your config options customization here. Examples:
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ND_SCANSCHEDULE&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;1h
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ND_LOGLEVEL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;info  
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ND_SESSIONTIMEOUT&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;24h
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ND_BASEURL&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;volumes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;.&#x2F;data:&#x2F;data&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;&#x2F;home&#x2F;pawan&#x2F;Music&#x2F;:&#x2F;music:ro&amp;quot;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;br &#x2F;&gt;
 &lt;br &#x2F;&gt;
@@ -634,34 +868,34 @@
 &lt;p&gt;Same as the music player above but for audiobooks and podcasts.&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2023-10-07-08-35-29.png&quot; alt=&quot;&quot; &#x2F;&gt;
 &lt;img src=&quot;&#x2F;images&#x2F;2023-10-07-09-57-01.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;version: &amp;quot;3.7&amp;quot;
-&lt;&#x2F;span&gt;&lt;span&gt;services:
-&lt;&#x2F;span&gt;&lt;span&gt;  audiobookshelf:
-&lt;&#x2F;span&gt;&lt;span&gt;    image: ghcr.io&#x2F;advplyr&#x2F;audiobookshelf:latest
-&lt;&#x2F;span&gt;&lt;span&gt;    container_name: audiobookshelf
-&lt;&#x2F;span&gt;&lt;span&gt;    ports:
-&lt;&#x2F;span&gt;&lt;span&gt;      - 13378:80
-&lt;&#x2F;span&gt;&lt;span&gt;    volumes:
-&lt;&#x2F;span&gt;&lt;span&gt;      - &#x2F;home&#x2F;pawan&#x2F;Storage&#x2F;movies&#x2F;AudioBooks:&#x2F;audiobooks
-&lt;&#x2F;span&gt;&lt;span&gt;      - &#x2F;home&#x2F;pawan&#x2F;Storage&#x2F;movies&#x2F;podcast:&#x2F;podcasts
-&lt;&#x2F;span&gt;&lt;span&gt;      - .&#x2F;config&#x2F;:&#x2F;config
-&lt;&#x2F;span&gt;&lt;span&gt;      - .&#x2F;metadata&#x2F;:&#x2F;metadata
+&lt;pre data-lang=&quot;yaml&quot; style=&quot;background-color:#2e3440;color:#d8dee9;&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;version&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;3.7&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;services&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;audiobookshelf&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;ghcr.io&#x2F;advplyr&#x2F;audiobookshelf:latest
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;container_name&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;audiobookshelf
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;13378:80
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;volumes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;home&#x2F;pawan&#x2F;Storage&#x2F;movies&#x2F;AudioBooks:&#x2F;audiobooks
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;home&#x2F;pawan&#x2F;Storage&#x2F;movies&#x2F;podcast:&#x2F;podcasts
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;.&#x2F;config&#x2F;:&#x2F;config
+&lt;&#x2F;span&gt;&lt;span&gt;      - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;.&#x2F;metadata&#x2F;:&#x2F;metadata
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;br &#x2F;&gt;
 &lt;br &#x2F;&gt;
 &lt;h4 id=&quot;kavita&quot;&gt;&lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;books.pawanchhetri.com.np&quot;&gt;Kavita&lt;&#x2F;a&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#kavita&quot; aria-label=&quot;Anchor link for: kavita&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
 &lt;p&gt;An online book reader. I don’t like reading softcopy books tho. Ctrl+c&#x2F;v code snippets from technical books is useful at times and it helps to have a softcopy even if you have a hardcopy for this purpose only.
 &lt;img src=&quot;&#x2F;images&#x2F;2023-10-07-08-39-05.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;version: &amp;#39;3.9&amp;#39;
-&lt;&#x2F;span&gt;&lt;span&gt;services:
-&lt;&#x2F;span&gt;&lt;span&gt;    kavita:
-&lt;&#x2F;span&gt;&lt;span&gt;        image: kizaing&#x2F;kavita:latest
-&lt;&#x2F;span&gt;&lt;span&gt;        volumes:
-&lt;&#x2F;span&gt;&lt;span&gt;            - &#x2F;home&#x2F;pawan&#x2F;Storage&#x2F;Bokks&#x2F;Books:&#x2F;manga
-&lt;&#x2F;span&gt;&lt;span&gt;            - .&#x2F;data:&#x2F;kavita&#x2F;config
-&lt;&#x2F;span&gt;&lt;span&gt;        ports:
-&lt;&#x2F;span&gt;&lt;span&gt;            - &amp;quot;5000:5000&amp;quot;
-&lt;&#x2F;span&gt;&lt;span&gt;        restart: unless-stopped
+&lt;pre data-lang=&quot;yaml&quot; style=&quot;background-color:#2e3440;color:#d8dee9;&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;version&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39;3.9&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;services&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;kavita&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;image&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;kizaing&#x2F;kavita:latest
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;volumes&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;            - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;home&#x2F;pawan&#x2F;Storage&#x2F;Bokks&#x2F;Books:&#x2F;manga
+&lt;&#x2F;span&gt;&lt;span&gt;            - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;.&#x2F;data:&#x2F;kavita&#x2F;config
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;ports&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;            - &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;5000:5000&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fbcbb;&quot;&gt;restart&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eceff4;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;unless-stopped
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;br &#x2F;&gt;
 &lt;br &#x2F;&gt;
@@ -869,6 +1103,7 @@ Btw, our web server is up.&lt;&#x2F;p&gt;
 &lt;li&gt;github&lt;&#x2F;li&gt;
 &lt;li&gt;cloudflare pages&lt;&#x2F;li&gt;
 &lt;&#x2F;ul&gt;
+&lt;p&gt;I’ve used theme and template for this repo: https:&#x2F;&#x2F;github.com&#x2F;thedataquarry&#x2F;thedataquarry.github.io&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;and-that-s-that&quot;&gt;And that’s that…&lt;a class=&quot;zola-anchor&quot; href=&quot;#and-that-s-that&quot; aria-label=&quot;Anchor link for: and-that-s-that&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
 &lt;p&gt;I’ll make it a point to try and write as often as possible&lt;&#x2F;p&gt;
 </content>
