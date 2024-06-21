@@ -59,7 +59,7 @@ K3s runs as a daemon on the server. The dotted ip will be used later to map doma
 &lt;&#x2F;span&gt;&lt;span&gt;alias kubectl=&amp;#39;sudo k3s kubectl&amp;#39;
 &lt;&#x2F;span&gt;&lt;span&gt;export KUBECONFIG=&#x2F;home&#x2F;pawan&#x2F;.kube&#x2F;config
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;h4 id=&quot;a-domain-name&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;blog&#x2F;k3s-homelab&#x2F;pawanchhetri.com.np&quot;&gt;A domain name&lt;&#x2F;a&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#a-domain-name&quot; aria-label=&quot;Anchor link for: a-domain-name&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;h4 id=&quot;a-domain-name&quot;&gt;&lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&quot;&gt;A domain name&lt;&#x2F;a&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#a-domain-name&quot; aria-label=&quot;Anchor link for: a-domain-name&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
 &lt;p&gt;Either buy a cheap one or apply for a free one. Set cloudflare nameservers.&lt;&#x2F;p&gt;
 &lt;h4 id=&quot;setting-cloudflare-tunnel&quot;&gt;&lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;developers.cloudflare.com&#x2F;cloudflare-one&#x2F;connections&#x2F;connect-networks&#x2F;get-started&#x2F;&quot;&gt;Setting cloudflare tunnel&lt;&#x2F;a&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#setting-cloudflare-tunnel&quot; aria-label=&quot;Anchor link for: setting-cloudflare-tunnel&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
 &lt;p&gt;This allows us to map socket(exposed port of our local machine&#x2F;ip) with a domain name.&lt;&#x2F;p&gt;
@@ -70,8 +70,8 @@ K3s runs as a daemon on the server. The dotted ip will be used later to map doma
 The tunnel status should be &lt;code&gt;HEALTHY&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;I’ll be deploying services for these two domains.&lt;&#x2F;p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;blog&#x2F;k3s-homelab&#x2F;jellyfin.pawanchhetri.com.np&quot;&gt;jellyfin.pawanchhetri.com.np&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pawanchhetri.com.np&#x2F;blog&#x2F;k3s-homelab&#x2F;grafana.pawanchhetri.com.np&quot;&gt;grafana.pawanchhetri.com.np&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;jellyfin.pawanchhetri.com.np&quot;&gt;jellyfin.pawanchhetri.com.np&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;grafana.pawanchhetri.com.np&quot;&gt;grafana.pawanchhetri.com.np&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
 &lt;&#x2F;ul&gt;
 &lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2024-06-20-19-20-15.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;kubernetes-deployment&quot;&gt;Kubernetes deployment&lt;a class=&quot;zola-anchor&quot; href=&quot;#kubernetes-deployment&quot; aria-label=&quot;Anchor link for: kubernetes-deployment&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
@@ -232,7 +232,7 @@ The tunnel status should be &lt;code&gt;HEALTHY&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Change the grafana svc to NodePort to access it from outside and also to map to domain name. Setting NodePort svc for prometheus is optional since all the targets are up by default and the integration as data sources is also done automatically.
 &lt;img src=&quot;&#x2F;images&#x2F;2024-06-20-20-12-14.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
-&lt;p&gt;A lot of default dashboard are loaded by default. We can create dashboards manually or grab an Id from &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;grafana.com&#x2F;grafana&#x2F;dashboards&#x2F;&quot;&gt;grafana_dashboards&lt;&#x2F;a&gt; of your choice and import it. &lt;&#x2F;p&gt;
+&lt;p&gt;A lot of dashboards are loaded by default which might be enough for k8s monitoring. But we can create dashboards manually or grab an Id from &lt;a rel=&quot;nofollow noreferrer&quot; href=&quot;https:&#x2F;&#x2F;grafana.com&#x2F;grafana&#x2F;dashboards&#x2F;&quot;&gt;grafana_dashboards&lt;&#x2F;a&gt; of your choice and import it. &lt;&#x2F;p&gt;
 &lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2024-06-20-19-31-50.png&quot; alt=&quot;&quot; &#x2F;&gt;
 Host monitoring - Node Exporter Full(ID 1860)&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2024-06-21-13-06-25.png&quot; alt=&quot;&quot; &#x2F;&gt;
