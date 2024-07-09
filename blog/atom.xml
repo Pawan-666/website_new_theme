@@ -18,6 +18,7 @@
         <id>https://pawanchhetri.com.np/blog/k3s-homelab/</id>
         
         <content type="html">&lt;p&gt;   I’ve been using my old laptop as a home server for about a year. Initially, I relied on Docker Compose to manage different services, which works well for single or multiple users. For a single or multiple users docker-compose is definitely the best way to set up a homelab server. But I wanted to use  Kubernetes because Kubernetes is the optimal solution, especially if I want several users at once and setting Kubernetes is fun. So, I’m upgrading to Kubernetes to deploy a media server and deploy a monitoring solution too. I’m also exposing these services through domain name, making them accessible from anywhere on the internet.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;2024-07-09-18-19-18.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;why-choose-kubernetes-over-docker-compose&quot;&gt;Why choose Kubernetes over docker-compose?&lt;a class=&quot;zola-anchor&quot; href=&quot;#why-choose-kubernetes-over-docker-compose&quot; aria-label=&quot;Anchor link for: why-choose-kubernetes-over-docker-compose&quot;&gt;#&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
 &lt;ol&gt;
 &lt;li&gt;
@@ -48,9 +49,10 @@ K3s runs as a daemon on the server. The dotted ip will be used later to map doma
 &lt;ul&gt;
 &lt;li&gt;initial kube config is present in &#x2F;etc&#x2F;rancher&#x2F;k3s&#x2F;k3s.yaml&lt;&#x2F;li&gt;
 &lt;&#x2F;ul&gt;
+&lt;p&gt;you can set this as default config too&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2e3440;color:#d8dee9;&quot;&gt;&lt;code&gt;&lt;span&gt;mkdir ~&#x2F;.kube
 &lt;&#x2F;span&gt;&lt;span&gt;cp &#x2F;etc&#x2F;rancher&#x2F;k3s&#x2F;k3s.yaml ~&#x2F;.kube&#x2F;config
-&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;chmod 600 ~&#x2F;.kube&#x2F;config&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;chmod 600 ~&#x2F;.kube&#x2F;config
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;ul&gt;
 &lt;li&gt;Put these commands in shell config file for persistence&lt;&#x2F;li&gt;
